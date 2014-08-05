@@ -1,8 +1,8 @@
 .. glance-specs documentation master file
 
-==============================
-Glance Project Specifications
-==============================
+=====================================
+Image Service Specifications (glance)
+=====================================
 
 Contents:
 
