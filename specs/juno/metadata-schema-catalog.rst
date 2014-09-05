@@ -50,6 +50,12 @@ for vendors or operators to publish their metadata definitions. It becomes more
 difficult as a cloud's scale grows and the number of resources being managed
 increases.
 
+In addition, cloud operators should be able to selectively control the
+property metadata that they want to be visible in the CLI or horizon UI.
+Just because an enabled driver or scheduler filter supports a certain property
+doesn't mean that the cloud operator wants that property to be readily visible
+for selection in the UI.
+
 **Background and Examples**
 
 At the Juno Atlanta summit, the Graffiti team demonstrated the concepts
@@ -74,17 +80,14 @@ and OpenStack services.
 
 Different APIs may use tags and key / value pairs differently. Tags often
 are not used to drive runtime behavior.  However, key / value pairs are
-often used by the system to potentially drive runtime, such as scheduling,
-quality of service, or driver behavior.  Other times, key / value pairs are
-only intended for end user use or external use such as a 3rd party policy
-engine and are not directly used to drive runtime behavior. Sometimes,
-the service API use is mixed because the service doesn’t differentiate
-between the two uses of the metadata.
+often used by the system to potentially drive runtime behavior, such as
+scheduling, quality of service, or driver behavior.  Other times, key / value
+pairs are only intended for end user use and are not directly used to drive
+runtime behavior. The metadata may also be used by an external entity such
+as a 3rd party policy engine. Some service APIs mix the metadata into a single
+bucket and don’t differentiate between the two uses of the metadata.
 
-The terminology for key / value pairs varies across services. In this
-proposal, we use the term "object" to describe a group of 1…* key /
-value pairs that may be applied to different kinds of resources for different
-purposes.
+The terminology for key / value pairs varies across services.
 
 A few examples of metadata today:
 
@@ -100,6 +103,9 @@ A few examples of metadata today:
 |  + tags                 |                           |                      |
 +-------------------------+---------------------------+----------------------+
 
+In this proposal, we use the term "object" to describe a group of 1…* key /
+value pairs that may be applied to different kinds of resources for different
+purposes.
 
 **Relationship to proposed artifacts API**
 
@@ -117,30 +123,20 @@ Proposed change
 We are proposing a new Metadata Definitions Catalog.  The following subsections
 detail the concepts managed by the catalog.
 
-**Tags**
+**Properties (Juno release)**
 
-A catalog of possible tags that can be used to help ensure tag name consistency
-across users, resource types, and services. So, when a user goes to apply a tag
-on a resource, they will be able to either create new tags or choose from tags
-that have been used elsewhere in the system on different types of resources.
-For example, the same tag could be used for Images, Volumes, and Instances.
-Tags are case insensitive (BigData is equivalent to bigdata but is different
-from Big-Data).
-
-**Properties**
-
-A property describes a single property its primitive
-constraints. Each property can ONLY be a primitive type:
+A property describes a single property and its primitive constraints. Each
+property can ONLY be a primitive type:
 
 * string, integer, number, boolean, array
 
 Each primitive type is described using simple JSON schema notation. This
 means NO nested objects and no definition referencing.
 
-**Objects**
+**Objects (Juno release)**
 
 An object describes a group of one to many properties and their primitive
-constraints. Each property can ONLY be a primitive type:
+constraints. Each property in the group can ONLY be a primitive type:
 
 * string, integer, number, boolean, array
 
@@ -151,7 +147,29 @@ The object may optionally define required properties under the semantic
 understanding that a user who uses the object should provide all required
 properties.
 
-**Hierarchy**
+Object derivation with property inheritance was considered, but we will defer
+this complexity until it is proven to be necessary.
+
+**Namespaces (Juno release)**
+
+Metadata definitions are contained in namespaces.
+
+- Specify the access controls (CRUD) for everything defined in it. Allows for
+  admin only, different projects, or the entire cloud to define and use the
+  definitions in the namespace
+- Associates the contained definitions to different types of resources
+
+**Tags (Future release)**
+
+A catalog of possible tags that can be used to help ensure tag name consistency
+across users, resource types, and services. So, when a user goes to apply a tag
+on a resource, they will be able to either create new tags or choose from tags
+that have been used elsewhere in the system on different types of resources.
+For example, the same tag could be used for Images, Volumes, and Instances.
+Tags are case insensitive (BigData is equivalent to bigdata but is different
+from Big-Data).
+
+**Tag Hierarchy (Future release)**
 
 The notion of hierarchy has come up in various application related
 discussions. It is very simple to support hierarchy. For example, tags of
@@ -161,35 +179,23 @@ or software template. Subsequent searches for resources could be performed for
 all "Databases" by simply retrieving the list of tags that are children of the
 "Database" tag.
 
-Object derivation with property inheritance is possible, but we
-aren’t sure that the complexity is useful at this time.
-
-**Namespaces**
-
-Object and tag definitions are contained in namespaces. Namespaces are the
-containment unit for managing object and tag definitions.
-
-- Specify the access controls (CRUD) for everything defined in it. Allows for
-  admin only, different projects, or the entire cloud to define and use the
-  definitions in the namespace
-- Allow for managing the associations to different types of resources
 
 Diagram:
 
 https://wiki.openstack.org/w/images/6/61/Glance-Metadata-Namespace.png
 
-We think it makes sense for there to be a default public namespace visible
-to all cloud users for all resource types. It could be disabled, but having a
+If needed in the future, it may make sense for there to be a default public
+namespace visible to all cloud users for all resource types. Having a
 default public namespace will make it very easy to manage general metadata
 without the overhead of a full multi-tenant environment.
 
-**Resource Type Association**
+**Resource Type Association (Juno release)**
 
 Resource type association specifies the relationship between resource
 types and the namespaces that are applicable to them. This information can be
 used to drive UI and CLI views. For example, the same namespace of
 objects, properties, and tags may be used for images, snapshots, volumes, and
-flavors.
+flavors. Or a namespace may only apply to images.
 
 Resource types should be aligned with Heat resource types.
 http://docs.openstack.org/developer/heat/template_guide/openstack.html
@@ -249,6 +255,16 @@ technical reasons why that wouldn’t make sense:
    DB on multiple Horizon servers or another server dedicated to the DB backend
    for Horizon.
 
+Services may always support a way to discover their available metadata. This
+API does not prevent that from occurring. However, this does provide a single
+central API to publish and discover metadata without every service having to
+implement such a facility. In addition, cloud operators should be able to
+selectively control the property metadata that they want to be visible in the
+CLI or horizon UI. Just because an enabled driver or scheduler filter supports
+a certain property doesn't mean that the cloud operator wants that property to
+be readily visible for selection in the UI. This API allows for cloud operators
+to have full control over what is made visible.
+
 A key use case is the collaboration on metadata using a common catalog. This
 is complementary to tags and key / value pairs being added ad-hoc across all
 services. We think in the future the metadata API could also be backed by
@@ -286,63 +302,74 @@ take comments during code review. Constraints not shown for readability.
 
 Suggested Basic Schema::
 
-  CREATE TABLE `metadef_namespaces` (
-    `id`                     int(11) NOT NULL AUTO_INCREMENT,
-    `namespace`              varchar(80) NOT NULL,
-    `display_name`           varchar(80) DEFAULT NULL,
-    `description`            text,
-    `visibility`             varchar(32) DEFAULT NULL,
-    `protected`              tinyint(1) DEFAULT NULL,
-    `owner`                  varchar(255) DEFAULT NULL,
-    `created_at`             timestamp NOT NULL,
-    `updated_at`             timestamp
-  )
+    Table: metadef_namespaces
 
-  CREATE TABLE `metadef_properties` (
-    `id`                     int(11) NOT NULL AUTO_INCREMENT,
-    `namespace_id`           int(11) NOT NULL,
-    `name`                   varchar(80) NOT NULL,
-    `schema`                 text,
-    `created_at`             timestamp NOT NULL,
-    `updated_at`             timestamp
-  )
+    +--------------+--------------+------+-----+----------------+
+    | Field        | Type         | Null | Key | Extra          |
+    +--------------+--------------+------+-----+----------------+
+    | id           | int(11)      | NO   | PRI | auto_increment |
+    | namespace    | varchar(80)  | NO   | UNI |                |
+    | display_name | varchar(80)  | YES  |     |                |
+    | description  | text         | YES  |     |                |
+    | visibility   | varchar(32)  | YES  |     |                |
+    | protected    | tinyint(1)   | YES  |     |                |
+    | owner        | varchar(255) | NO   |     |                |
+    | created_at   | datetime     | NO   |     |                |
+    | updated_at   | datetime     | YES  |     |                |
+    +--------------+--------------+------+-----+----------------+
 
-  CREATE TABLE `metadef_objects` (
-    `id`                     int(11) NOT NULL AUTO_INCREMENT,
-    `namespace_id`           int(11) NOT NULL,
-    `name`                   varchar(80) NOT NULL,
-    `description`            text,
-    `schema`                 text,
-    `required`               text,
-    `created_at`             timestamp NOT NULL,
-    `updated_at`             timestamp
-  )
+    Table: metadef_objects
 
-  CREATE TABLE `metadef_tags` (
-    `id`                     int(11) NOT NULL AUTO_INCREMENT,
-    `namespace_id`           int(11) NOT NULL,
-    `name`                   varchar(80) NOT NULL,
-    `created_at`             timestamp NOT NULL,
-    `updated_at`             timestamp
-  )
+    +--------------+-------------+------+-----+----------------+
+    | Field        | Type        | Null | Key | Extra          |
+    +--------------+-------------+------+-----+----------------+
+    | id           | int(11)     | NO   | PRI | auto_increment |
+    | namespace_id | int(11)     | NO   | MUL |                |
+    | name         | varchar(80) | NO   |     |                |
+    | description  | text        | YES  |     |                |
+    | required     | text        | YES  |     |                |
+    | json_schema  | text        | YES  |     |                |
+    | created_at   | datetime    | NO   |     |                |
+    | updated_at   | datetime    | YES  |     |                |
+    +--------------+-------------+------+-----+----------------+
 
-  CREATE TABLE `metadef_tag_parents` (
-    `child_tag_id`           int(11) NOT NULL,
-    `parent_tag_id`          int(11) NOT NULL
-  )
+    Table: metadef_properties
 
-  CREATE TABLE `metadef_resource_types` (
-    `id`                     int(11) NOT NULL AUTO_INCREMENT,
-    `resource_type`          varchar(80) NOT NULL,
-    `protected`              tinyint(1)  DEFAULT 0
-  )
+    +--------------+-------------+------+-----+----------------+
+    | Field        | Type        | Null | Key | Extra          |
+    +--------------+-------------+------+-----+----------------+
+    | id           | int(11)     | NO   | PRI | auto_increment |
+    | namespace_id | int(11)     | NO   | MUL |                |
+    | name         | varchar(80) | NO   |     |                |
+    | json_schema  | text        | YES  |     |                |
+    | created_at   | datetime    | NO   |     |                |
+    | updated_at   | datetime    | YES  |     |                |
+    +--------------+-------------+------+-----+----------------+
 
-  CREATE TABLE `metadef_namespace_resource_types` (
-    `resource_type_id`       int(11) NOT NULL,
-    `namespace_id`           int(11) NOT NULL,
-    `properties_target`      varchar(80) NULL,
-    `prefix`                 varchar(80) NULL
-  )
+    Table: metadef_resource_types
+
+    +------------+-------------+------+-----+----------------+
+    | Field      | Type        | Null | Key | Extra          |
+    +------------+-------------+------+-----+----------------+
+    | id         | int(11)     | NO   | PRI | auto_increment |
+    | name       | varchar(80) | NO   | UNI |                |
+    | protected  | tinyint(1)  | NO   |     |                |
+    | created_at | datetime    | NO   |     |                |
+    | updated_at | datetime    | YES  |     |                |
+    +------------+-------------+------+-----+----------------+
+
+    Table: metadef_namespace_resource_types
+
+    +-------------------+-------------+------+-----+-------+
+    | Field             | Type        | Null | Key | Extra |
+    +-------------------+-------------+------+-----+-------+
+    | resource_type_id  | int(11)     | NO   | PRI |       |
+    | namespace_id      | int(11)     | NO   | PRI |       |
+    | properties_target | varchar(80) | YES  |     |       |
+    | prefix            | varchar(80) | YES  |     |       |
+    | created_at        | datetime    | NO   |     |       |
+    | updated_at        | datetime    | YES  |     |       |
+    +-------------------+-------------+------+-----+-------+
 
 
 REST API impact
@@ -360,7 +387,6 @@ Basic interaction is:
  #. Get list of namespaces with overview info based on the desired filters.
     (e.g. key / values for images).
  #. Get objects
- #. Get tags
 
 **Common Response Codes**
 
@@ -369,7 +395,9 @@ Basic interaction is:
 * Delete Success: `204 No Content`
 * Failure: `400 Bad Request` with details.
 * Forbidden: `403 Forbidden`
-* Not found: `404 Not found` if specific entity not found
+* Not found: `404 Not found`       e.g. if specific entity not found
+* Not found: `405 Not allowed`     e.g. if trying to delete on a list resource
+* Not found: `501 Not Implemented` e.g. HEAD not implemented
 
 **API Version**
 
@@ -381,10 +409,10 @@ Create a namespace:
 
 Namespace may optionally contain the following in addition to basic fields.
 
-* resource_types
+* resource_type_associations
 * properties
 * objects
-* tags
+* tags (future release)
 
 Example Body (with no resource types, properties, objects, or tags)::
 
@@ -396,7 +424,7 @@ Example Body (with no resource types, properties, objects, or tags)::
     "protected": true
   }
 
-Replace a namespace definition (not including properties, objects, and tags):
+Replace a namespace definition (not including properties, objects, or tags):
     PUT /metadefs/namespaces/{namespace}
 
 List Namespaces: Returns just the list of namespaces without any objects
@@ -411,37 +439,69 @@ Example Body::
             {namespace2Here}
         ],
         "first": "/v2/metadefs/namespaces?limit=2",
-        "next": "/v2/metadefs/namespaces?marker=namespace2Here&limit=2"
+        "next": "/v2/metadefs/namespaces?marker=namespace2Here&limit=2",
+        "schema": "/v2/schemas/metadefs/namespaces"
     }
 
     With example namespace:
 
     {
+        "first": "/v2/metadefs/namespaces?sort_key=created_at&sort_dir=asc",
         "namespaces": [
             {
-                "namespace": "MyNamespace",
-                "display_name": "My User Friendly Namespace",
-                "description": "My description",
-                "property_count": 0,
-                "object_count": 2,
-                "tag_count": 0,
-                "resource_types" : [
-                    {
-                       "name" :"OS::Nova::Aggregate"
-                    },
-                    {
-                       "name" : "OS::Nova::Flavor",
-                       "prefix" : "aggregate_instance_extra_specs:"
-                    }
-                ],
+                "namespace": "OS::Compute::Quota",
+                "display_name": "Flavor Quota",
+                "description": "Compute drivers may enable quotas on...",
                 "visibility": "public",
                 "protected": true,
-                "owner": "The Test Owner",
-                "self": "/v2/metadefs/namespace/MyNamespace"
+                "owner": "admin",
+                "resource_type_associations": [
+                    {
+                        "name": "OS::Nova::Flavor",
+                        "created_at": "2014-08-28T17:13:06Z",
+                        "updated_at": "2014-08-28T17:13:06Z"
+                    }
+                ],
+                "created_at": "2014-08-28T17:13:06Z",
+                "updated_at": "2014-08-28T17:13:06Z",
+                "self": "/v2/metadefs/namespaces/OS::Compute::Quota",
+                "schema": "/v2/schemas/metadefs/namespace"
+            },
+            {
+                "namespace": "OS::Compute::VirtCPUTopology",
+                "display_name": "Virtual CPU Topology",
+                "description": "This provides the preferred...",
+                "visibility": "public",
+                "protected": true,
+                "owner": "admin",
+                "resource_type_associations": [
+                    {
+                        "name": "OS::Glance::Image",
+                        "prefix": "hw_",
+                        "created_at": "2014-08-28T17:13:06Z",
+                        "updated_at": "2014-08-28T17:13:06Z"
+                    },
+                    {
+                        "name": "OS::Cinder::Volume",
+                        "prefix": "hw_",
+                        "properties_target": "image",
+                        "created_at": "2014-08-28T17:13:06Z",
+                        "updated_at": "2014-08-28T17:13:06Z"
+                    },
+                    {
+                        "name": "OS::Nova::Flavor",
+                        "prefix": "hw:",
+                        "created_at": "2014-08-28T17:13:06Z",
+                        "updated_at": "2014-08-28T17:13:06Z"
+                    }
+                ],
+                "created_at": "2014-08-28T17:13:06Z",
+                "updated_at": "2014-08-28T17:13:06Z",
+                "self": "/v2/metadefs/namespaces/OS::Compute::VirtCPUTopology",
+                "schema": "/v2/schemas/metadefs/namespace"
             }
         ],
-        "first": "/v2/metadefs/namespaces?limit=1",
-        "next": "/v2/metadefs/namespaces?marker=MyNamespace&limit=1"
+        "schema": "/v2/schemas/metadefs/namespaces"
     }
 
 
@@ -468,11 +528,13 @@ Query parameters::
  resource_type  = When specified, the API will look up the prefix associated
                   with the specified resource type and will apply the prefix
                   to all properties (including object properties) prior to
-                  returning the result. For example, if a
+                  returning the namespace. For example, if a
                   resource_type_association in the namespace for
                   OS::Nova::Flavor specifies a prefix of hw:, then all
                   properties in the namespace will be returned with
-                  hw:<prop_name>.
+                  hw:<prop_name>. However if, OS::Glance::Image is specified
+                  and the prefix is set to hw_, then the property will be
+                  returned as hw_<prop_name>.
 
 Example Body::
 
@@ -481,16 +543,17 @@ Example Body::
         "namespace": "MyNamespace",
         "display_name": "My User Friendly Namespace",
         "description": "My description",
-        "property_count": 1,
-        "object_count": 0,
-        "tag_count": 0,
-        "resource_types" : [
+        "resource_type_associations" : [
             {
-               "name" :"OS::Nova::Aggregate"
+               "name" :"OS::Nova::Aggregate",
+               "created_at": "2014-08-28T17:13:06Z",
+               "updated_at": "2014-08-28T17:13:06Z"
             },
             {
                "name" : "OS::Nova::Flavor",
-               "prefix" : "aggregate_instance_extra_specs:"
+               "prefix" : "aggregate_instance_extra_specs:",
+               "created_at": "2014-08-28T17:13:06Z",
+               "updated_at": "2014-08-28T17:13:06Z"
             }
         ],
         "properties": {
@@ -498,7 +561,6 @@ Example Body::
                 "title": "My namespace property1",
                 "description": "More info here",
                 "type": "boolean",
-                "readonly": true,
                 "default": true
             }
         },
@@ -508,7 +570,7 @@ Example Body::
     }
 
 
-Delete a namespace including all content (tags, properties, and objects)
+Delete a namespace including all content (properties, objects and tags(future release))
     DELETE /v2/metadefs/namespaces/{namespace}
 
 List resource types associated with a namespace
@@ -517,21 +579,27 @@ List resource types associated with a namespace
 Example::
 
   {
-    "resource_types" : [
+    "resource_type_associations": [
         {
-           "name" : "OS::Glance::Image",
-           "prefix" : "hw_"
+            "name": "OS::Glance::Image",
+            "prefix": "hw_",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         },
         {
-           "name" :"OS::Cinder::Volume",
-           "prefix" : "hw_",
-           "properties_target" : "image_metadata"
+            "name": "OS::Cinder::Volume",
+            "prefix": "hw_",
+            "properties_target": "image_metadata",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         },
         {
-           "name" : "OS::Nova::Flavor",
-           "prefix" : "hw:"
+            "name": "OS::Nova::Flavor",
+            "prefix": "hw:",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         }
-    }
+    ]
   }
 
 Field descriptions::
@@ -562,7 +630,9 @@ Example::
   {
     "name" :"OS::Cinder::Volume",
     "properties_target" : "image_metadata",
-    "prefix" : "hw_"
+    "prefix" : "hw_",
+    "created_at": "2014-08-28T17:13:06Z",
+    "updated_at": "2014-08-28T17:13:06Z"
   }
 
 De-associate Namespace from resource type
@@ -589,19 +659,17 @@ Example::
     "properties": {
         "minIOPS": {
             "type": "integer",
-            "readonly": false,
             "description": "The minimum IOPs required",
             "default": 100,
             "minimum": 100,
-            "maximum": 30000369
+            "maximum": 30000
         },
         "burstIOPS": {
             "type": "integer",
-            "readonly": false,
             "description": "The expected burst IOPs",
             "default": 1000,
             "minimum": 100,
-            "maximum": 30000377
+            "maximum": 30000
         }
     }
   }
@@ -646,7 +714,6 @@ Example Body::
                     "title": "My Property",
                     "description": "More info here",
                     "type": "boolean",
-                    "readonly": true,
                     "default": true
                 }
             }
@@ -664,7 +731,7 @@ Add Property in a specific namespace:
 
 Example::
 
-  POST /metadefs/namespaces/OS::Glance::CommonImageProperties/properties
+  POST /metadefs/namespaces/OS::Compute::Hypervisor/properties
 
   {
         "name": "hypervisor_type",
@@ -674,7 +741,6 @@ Example::
             "type": "string",
             "enum": ["hyperv", "qemu", "kvm"]
          }
-     }
   }
 
 Replace a property definition in a namespace:
@@ -705,234 +771,197 @@ Filters by adding query parameters::
                   request.
 
 
-**Tags**
-
-List All Tags visible to user:
-    GET /metadefs/tags
-
-Filters by adding query parameters::
-
- tag_prefix     = Support now with only case insensitive, prefix search,
-                   e.g. "CEN" would find CENTOS
- namespaces     = <comma separated list>
- resource_types = <comma separated list> e.g. OS::Glance::Image
- visibility     = Valid values are public, private.
-                  Default is to return both public namespaces and private
-                  namespaces visible to the user making the request.
- limit          = Use to request a specific page size. Expect a response
-                  to a limited request to return between zero and limit items.
- marker         = Specifies the namespace of the last-seen namespace.
-                  The typical pattern of limit and marker is to make an initial
-                  limited request and then to use the last namespace from the
-                  response as the marker parameter in a subsequent limited
-                  request.
-
-
-
-Pattern filter could be supported in future blueprint that incorporates
-elasticsearch across OpenStack.
-
-Example Body::
-
-    {
-        "tags" : [
-            "tag-one",
-            "tag-n"
-        ]
-    }
-
-Create / Replace all tags in a specific namespace:
-    POST /metadefs/namespaces/{namespace}/tags/
-
-Example Body::
-
-    {
-        "tags" : [
-            "tag-one",
-            "tag-n"
-        ]
-    }
-
-Add tag in a specific namespace:
-    POST /metadefs/namespaces/{namespace}/tags/{tag}
-
-Delete tag in specific namespace:
-    DELETE /metadefs/namespaces/{namespace}/tags/{tag}
-
-Delete all tags in specific namespace:
-    DELETE /metadefs/namespaces/{namespace}/tags
-
-List Tags that are immediate children of a specific tag (Hierarchy):
-    GET /metadefs/namespaces/{namespace}/tags/{tag}/children
-
-e.g. /metadefs/namespaces/default/tags/database/children
-
-Example Body::
-
-    {
-        "tags" : [
-            "mysql",
-            "oracle",
-            "postgres"
-        ]
-    }
-
-Add parent tag to a tag:
-    PUT /metadefs/namespaces/{namespace}/tags/{tag}/parent/{tag}
-
-e.g. PUT /metadefs/namespaces/default/tags/mysql/parent/database
-
-List Tags that are children of a specific tag (Hierarchy):
-    GET /metadefs/namespaces/{namespace}/tags/{tag}/descendants
-
-e.g. /metadefs/namespaces/{namespace}/tags/database/descendants
-
-Example Body::
-
-    {
-        "tags" : [
-            "mysql",
-            "oracle",
-            "postgres"
-        ]
-    }
-
-**Namespace membership management (Potentially Deferred to Future Spec)**
+**Namespace membership management (Deferred to Future Release)**
 
 Allows different projects to have visibility to a non-public namespace.
 
-Add a member to having access to a namespace
-    POST /metadefs/namespaces/{namespace}/members/
+For example, a cloud operator may have special hardware that is capable of
+running cloud and weather simulations. Images that have a certain property
+on it will get scheduled for that hardware and the operator only wants certain
+projects to see that property and hide it from other projects so that the
+cloud hardware isn't misused.
 
-Example Body::
-
-  {
-    "member": "8987754tst4feggw37"
-  }
-
-Remove a member from having access to a namespace
-    DELETE /metadefs/namespaces/{namespace}/members/{member_id}
-
-List all members that have access to a namespace
-    GET metadata/namespaces/{namespace}/members/
-
-Example Body::
-
-  {
-    "members": [
-        {
-            "created_at": "2013-10-07T17:58:03Z",
-            "member_id": "8987754tst4feggw37",
-            "namespace": "sample_namespace"
-        },
-        {
-            "created_at": "2013-10-07T17:58:55Z",
-            "member_id": "8987754tst4feggw37ads",
-            "namespace": "sample_namespace"
-        }
-    ],
-    "schema": "/schemas/metadefs/members"
-  }
 
 **Schema**
-
-Note, this is not complete and similar to artifacts, will be updated later.
 
 JSON Schema for Namespace::
 
   {
-    "name": "namespace",
+    "required": [
+        "namespace"
+    ],
     "properties": {
         "namespace": {
             "type": "string",
             "description": "The unique namespace text.",
             "maxLength": 80
         },
-        "display_name": {
-            "type": "string",
-            "description": "The user friendly name for the namespace.  Used by UI if available.",
-            "maxLength": 80
-        },
         "description": {
             "type": "string",
-            "description": "Provides a user friendly description of the namespace",
+            "description": "Provides a user friendly description of the namespace.",
             "maxLength": 500
         },
-        "property_count": {
-            "type": "integer",
-            "description": "The number of properties defined in this namespace, not including those defined within objects.",
-            "minimum": 0
-        },
-        "object_count": {
-            "type": "integer",
-            "description": "The number of objects defined in this namespace.",
-            "minimum": 0
-        },
-        "tag_count": {
-            "type": "integer",
-            "description": "The number of objects defined in this namespace.",
-            "minimum": 0
-        },
-        "visibility": {
+        "display_name": {
             "type": "string",
-            "enum": [
-                    "public",
-                    "private"
-                ]
-        },
-        "protected": {
-           "type": "boolean",
-           "description": "If true, image will not be deletable."
+            "description": "The user friendly name for the namespace. Used by UI if available.",
+            "maxLength": 80
         },
         "owner": {
             "type": "string",
-            "description": "Owner of the namespace",
+            "description": "Owner of the namespace.",
             "maxLength": 255
+        },
+        "visibility": {
+            "enum": [
+                "public",
+                "private"
+            ],
+            "type": "string",
+            "description": "Scope of namespace accessibility."
+        },
+        "protected": {
+            "type": "boolean",
+            "description": "If true, namespace will not be deletable."
         },
         "created_at": {
             "type": "string",
-            "description": "Date and time of registration (READ-ONLY)",
+            "description": "Date and time of namespace creation (READ-ONLY)",
             "format": "date-time"
         },
         "updated_at": {
             "type": "string",
-            "description": "Date and time of the last modification (READ-ONLY)",
+            "description": "Date and time of the last namespace modification (READ-ONLY)",
             "format": "date-time"
-        }
+        },
+        "properties": {
+            "$ref": "#/definitions/property"
+        },
+        "objects": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "$ref": "#/definitions/property"
+                    },
+                    "required": {
+                        "$ref": "#/definitions/stringArray"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "array"
+        },
+        "resource_type_associations": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "prefix": {
+                        "type": "string"
+                    },
+                    "properties_target": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "array"
+        },
+        "schema": {
+            "type": "string"
+        },
+        "self": {
+            "type": "string"
+        },
+        "additionalProperties": false
     }
   }
+
+.. note:: See Schema Definitions below for $ref.
 
 Variations on Namespace schema:
 
 Namespace can also contain the following:
 
-* resource_types
+* resource_type_associations
 * properties
 * objects
-* tags
+* tags (future release)
 
 JSON Schema for Resource Types::
 
   {
-    "required": ["name"],
+    "name": "resource_type_associations",
+    "links": [
+        {
+            "href": "{first}",
+            "rel": "first"
+        },
+        {
+            "href": "{next}",
+            "rel": "next"
+        },
+        {
+            "href": "{schema}",
+            "rel": "describedby"
+        }
+    ],
     "properties": {
-        "name": {
-            "type": "string",
-            "description": "Resource type names should be aligned with Heat resource types whenever possible: http://docs.openstack.org/developer/heat/template_guide/openstack.html",
-            "maxLength": 80
+        "schema": {
+            "type": "string"
         },
-        "prefix": {
-            "type": "string",
-            "description": "Specifies the prefix to use for the given resource type. Any properties in the namespace should be prefixed with this prefix when being applied to the specified resource type. Must include prefix separator (e.g. a colon :).",
-            "maxLength": 80
+        "next": {
+            "type": "string"
         },
-        "properties_target": {
-            "type": "string",
-            "description": "Some resource types allow more than one key / value pair per instance.  For example, Cinder allows user and image metadata on volumes. Only the image properties metadata is evaluated by Nova (scheduling or drivers). This property allows a namespace target to remove the ambiguity.",
-            "maxLength": 80
+        "resource_type_associations": {
+            "items": {
+                "additionalProperties": false,
+                "required": [
+                    "name"
+                ],
+                "name": "resource_type_association",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Resource type names should be aligned with Heat resource types whenever possible: http://docs.openstack.org/developer/heat/template_guide/openstack.html",
+                        "maxLength": 80
+                    },
+                    "prefix": {
+                        "type": "string",
+                        "description": "Specifies the prefix to use for the given resource type. Any properties in the namespace should be prefixed with this prefix when being applied to the specified resource type. Must include prefix separator (e.g. a colon :).",
+                        "maxLength": 80
+                    },
+                    "properties_target": {
+                        "type": "string",
+                        "description": "Some resource types allow more than one key / value pair per instance.  For example, Cinder allows user and image metadata on volumes. Only the image properties metadata is evaluated by Nova (scheduling or drivers). This property allows a namespace target to remove the ambiguity.",
+                        "maxLength": 80
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Date and time of resource type association (READ-ONLY)",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "Date and time of the last resource type association modification (READ-ONLY)",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "type": "array"
+        },
+        "first": {
+            "type": "string"
         }
     }
   }
+
 
 JSON Schema for Properties
 
@@ -946,46 +975,171 @@ JSON schema v4 syntax.  But are limited to the following types:
 
 Each primitive type is described using simple JSON schema notation. This
 means NO nested objects and no definition referencing.
-
+.. note:: See Schema Definitions below for property defintion.
 
 JSON Schema for Objects::
 
   {
-    "name": {
-        "type": "string",
-        "description": "Name of the metadata object",
-        "maxLength": 80
-    },
-    "description": {
-        "type": "string",
-        "description": "Description of the metadata object",
-        "maxLength": 500
-    },
-    "required": {
-        "type": "array",
-        "items": {
+    "required": [
+        "name"
+    ],
+    "name": "object",
+    "additionalProperties": false,
+    "properties": {
+        "name": {
             "type": "string"
         },
-        "description": "required properties for the metadata object."
+        "required": {
+            "$ref": "#/definitions/stringArray"
+        },
+        "properties": {
+            "$ref": "#/definitions/property"
+        },
+        "description": {
+            "type": "string"
+        },
+        "created_at": {
+            "type": "string",
+            "description": "Date and time of object creation (READ-ONLY)",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "description": "Date and time of the last object modification (READ-ONLY)",
+            "format": "date-time"
+        },
+        "schema": {
+            "type": "string"
+        },
+        "self": {
+            "type": "string"
+        }
     }
   }
 
 Objects also contain "properties" as mentioned above.
+.. note:: See Schema Definitions below for $ref.
 
-JSON Schema for Tags::
 
-    {
-        "properties": {
-            "tags": {
-                "type": "array",
-                "items": {
-                    "type": "string",
+JSON Schema common definitions::
+
+  {
+    "definitions": {
+        "property": {
+            "additionalProperties": {
+                "required": [
+                    "title",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "additionalItems": {
+                        "type": "boolean"
+                    },
+                    "enum": {
+                        "type": "array"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "default": {},
+                    "minLength": {
+                        "$ref": "#/definitions/positiveIntegerDefault0"
+                    },
+                    "required": {
+                        "$ref": "#/definitions/stringArray"
+                    },
+                    "maximum": {
+                        "type": "number"
+                    },
+                    "minItems": {
+                        "$ref": "#/definitions/positiveIntegerDefault0"
+                    },
+                    "readonly": {
+                        "type": "boolean"
+                    },
+                    "minimum": {
+                        "type": "number"
+                    },
+                    "maxItems": {
+                        "$ref": "#/definitions/positiveInteger"
+                    },
+                    "maxLength": {
+                        "$ref": "#/definitions/positiveInteger"
+                    },
+                    "uniqueItems": {
+                        "default": false,
+                        "type": "boolean"
+                    },
+                    "pattern": {
+                        "type": "string",
+                        "format": "regex"
+                    },
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "enum": {
+                                "type": "array"
+                            },
+                            "type": {
+                                "enum": [
+                                    "array",
+                                    "boolean",
+                                    "integer",
+                                    "number",
+                                    "object",
+                                    "string",
+                                    null
+                                ],
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "type": {
+                        "enum": [
+                            "array",
+                            "boolean",
+                            "integer",
+                            "number",
+                            "object",
+                            "string",
+                            null
+                        ],
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
                 }
-            }
+            },
+            "type": "object"
+        },
+        "positiveIntegerDefault0": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/positiveInteger"
+                },
+                {
+                    "default": 0
+                }
+            ]
+        },
+        "stringArray": {
+            "uniqueItems": true,
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "positiveInteger": {
+            "minimum": 0,
+            "type": "integer"
         }
     }
-
-
+  }
 
 Security impact
 ---------------
@@ -1008,15 +1162,12 @@ Performance Impact
 No changes to existing APIs or code.
 
 This is expected to be called from Horizon when an admin wants to annotate
-tags or key / value pairs onto things likes images and volumes. This API would
-be hit for them to get available metadata.
+tags (future) or key / value pairs onto things likes images and volumes.
+This API would be hit for them to get available metadata.
 
 Other deployer impact
 ---------------------
-DB Schema Creation for new API
-
-A new configuration entry to specify additional resource types to which
-namespaces should be associated.
+DB Schema Creation for new API will now be a newer version
 
 Default resource types will be hardcoded:
 * OS::Glance::Image
@@ -1026,11 +1177,29 @@ Default resource types will be hardcoded:
 * OS::Nova::Instance
 
 glance-manage will have new commands for loading, unloading, and exporting
-metadata definitions.
+metadata definitions:
+* db_load_metadefs - Loads metadata definitions from a specified directory
+* db_unload_metadefs - Unloads all metadata definitions in the database
+* db_export_metadefs - Exports metadata definitions to s a specified directory
 
-Default definition files will be checked into glance.
-Deployers can customize these and provide additional definition files suitable
-to their cloud deployment.
+The python-glanceclient will also support a new set of API and CLI commands
+for fine grained management of the metadata definitions in the catalog.
+
+Default definition files will be checked into glance under etc/metadefs
+
+Please note, the default definitions are only suggestions based on potential
+metadata in a given OpenStack deployment. The configuration of the actual
+deployment environment will likely require the cloud operator to limit
+what metadata should be made available in this catalog. They may limit it
+based on enabled drivers and filters or may choose to only offer a subset
+of the options offered by those drivers and filters. Just because an enabled
+driver or scheduler filter supports certain properties doesn't mean that
+the cloud operator wants all the properties to be readily visible for selection
+in the UI.
+
+Deployers can customize the definitions to be suitable to their cloud
+deployment by deleting namespaces, modifying namespaces, creating new
+namespaces, and changing namespace to resource type associations.
 
 devstack will be modified to call this command to load in all the default
 metadata definitions.
@@ -1067,11 +1236,11 @@ Changes would be made to:
  #. The database API layer to add support for CRUD operations on namespaces
  #. The database API layer to add support for CRUD operations on properties
  #. The database API layer to add support for CRUD operations on objects
- #. The database API layer to add support for CRUD operations on tags
+ #. The database API layer to add support for CRUD operations on resource type associations
  #. The REST API for CRUD operations on the namespaces
  #. The REST API for CRUD operations on the objects
- #. The REST API for CRUD operations on the objects
- #. The REST API for CRUD operations on the tags
+ #. The REST API for CRUD operations on the properties
+ #. The REST API for CRUD operations on the resource type associations
  #. The python-glanceClient to support operations
 
 Dependencies
@@ -1118,7 +1287,7 @@ Current glance metadata properties in documentation:
 Hierarchical tagging concepts were partially inspired by AWS marketplace. In
 the marketplace, you can filter by a hierarchy of categories. It made sense to
 us that this would be easy to achieve across various kinds of artifacts and
-resources through tags.
+resources through tags (future release).
 
 `AWS Categories
 <https://aws.amazon.com/marketplace/help/200901100#step1>`_
@@ -1178,35 +1347,6 @@ Example Data (subset)::
   }
 
 
-*Simple application category tags (no hierarchy)*
-
-Images, volumes, software applications can be assigned to a category.
-Similarly, a flavor or host aggregate could be "tagged" with supporting a
-category of application, such as "Big Data" or "Encryption". Using the
-matching of categories, flavors or host aggregates that support that category
-of application can be easily paired up.
-
-Note: If a resource type doesn’t provide a "Tag" mechanism (only key value
-pairs), a blueprint should be added to support tags on that type of resource.
-In lieu of that, a key of "tags" with a comma separated list of tags as the
-value be set on the resource
-
-*Namespace with hierarchical tags*
-
-Images, volumes, software applications can be assigned to a category.
-Similarly, a flavor or host aggregate could be "tagged" with supporting a
-category of application, such as "CRM". Using the matching of categories,
-flavors or hosts that support that category of application can be easily
-paired up.  Adding the notion of hierarchy allows searching based on the
-hierarchy (show me all applications that are type "BusinessSoftware").
-
-- Application Categories
-
-  - Business Software
-     + Business Intelligence
-     + Collaboration
-     + Content Management
-
 *Basic Host Aggregate / Flavor pairing of properties*
 
 Today you can ensure that flavors are launched on specific hosts using host
@@ -1237,10 +1377,7 @@ Example::
     "namespace": "MyHostGroups",
     "title": "My Host Groups",
     "description": "Different ways that we like to group our private cloud",
-    "property_count": 0,
-    "object_count": 2,
-    "tag_count": 0,
-    "resource_types" : [
+    "resource_type_associations" : [
         {
            "name" :"OS::Nova::Aggregate"
         },
@@ -1256,7 +1393,6 @@ Example::
                 "title": "SSD",
                 "description": "Describe instances with SSD storage.",
                 "type": "boolean",
-                "readonly": true,
                 "default": true
             }
         }
@@ -1266,7 +1402,7 @@ Example::
     "owner": "The Test Owner"
   }
 
-*Sample Namespace with properties, objects and tags*
+*Sample Namespace with properties and objects*
 
 /metadefs/namespace/MyNamespace/detail
 
@@ -1276,22 +1412,25 @@ Example::
     "namespace": "MyNamespace",
     "display_name": "My User Friendly Namespace",
     "description": "My description",
-    "property_count": 2,
-    "object_count": 2,
-    "tag_count": 3,
-    "resource_types" : [
+    "resource_type_associations": [
         {
-           "name" : "OS::Glance::Image",
-           "prefix" : "hw_"
+            "name": "OS::Glance::Image",
+            "prefix": "hw_",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         },
         {
-           "name" :"OS::Cinder::Volume",
-           "prefix" : "hw_",
-           "properties_target" : "image_metadata"
+            "name": "OS::Cinder::Volume",
+            "prefix": "hw_",
+            "properties_target": "image_metadata",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         },
         {
-           "name" : "OS::Nova::Flavor",
-           "prefix" : "filter1:"
+            "name": "OS::Nova::Flavor",
+            "prefix": "filter1:",
+            "created_at": "2014-08-28T17:13:06Z",
+            "updated_at": "2014-08-28T17:13:06Z"
         }
     ],
     "properties": {
@@ -1299,22 +1438,20 @@ Example::
             "title": "My namespace property1",
             "description": "More info here",
             "type": "boolean",
-            "readonly": true,
             "default": true
         },
         "nsprop2": {
             "title": "My namespace property2",
             "description": "More info here",
             "type": "string",
-            "readonly": true,
             "default": "value1"
         }
     },
     "objects": [
         {
             "name": "object1",
-            "namespace": "my-namespace",
-            "description": "my-description",
+            "namespace": "MyNamespace",
+            "description": "My object1 description",
             "properties": {
                 "prop1": {
                     "title": "My object1 property1",
@@ -1322,30 +1459,23 @@ Example::
                     "type": "array",
                     "items": {
                         "type": "string"
-                    },
-                    "readonly": false
+                    }
                 }
             }
         },
         {
             "name": "object2",
-            "namespace": "my-namespace",
-            "description": "my-description",
+            "namespace": "MyNamespace",
+            "description": "My object2 description",
             "properties": {
                 "prop1": {
                     "title": "My object2 property1",
                     "description": "More info here",
                     "type": "integer",
-                    "readonly": true,
                     "default": 20
                 }
             }
         }
-    ],
-    "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
     ],
     "visibility": "public",
     "protected": true,
