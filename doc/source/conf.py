@@ -34,8 +34,13 @@ extensions = ['sphinx.ext.autodoc',
               'sphinxcontrib.actdiag',
               'sphinxcontrib.seqdiag',
               'sphinxcontrib.nwdiag',
-              'oslosphinx'
+              'oslosphinx',
+              'yasfb',
              ]
+
+# Feed configuration for yasfb
+feed_base_url = 'http://specs.openstack.org/openstack/glance-specs'
+feed_author = 'OpenStack Glance Team'
 
 todo_include_todos = True
 
