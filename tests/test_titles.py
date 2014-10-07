@@ -93,7 +93,9 @@ class TestTitles(testtools.TestCase):
         self.assertEqual(0, len(titles[refs]))
 
     def test_template(self):
-        files = ['specs/template.rst'] + glob.glob('specs/*/*')
+        files = (['specs/template.rst'] +
+                 filter(lambda x: not x.endswith('index.rst'),
+                        glob.glob('specs/*/*')))
         for filename in files:
             self.assertTrue(filename.endswith(".rst"),
                             "spec's file must uses 'rst' extension.")
