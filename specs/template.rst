@@ -92,7 +92,7 @@ Questions which need to be addressed by this section include:
 REST API impact
 ---------------
 
-Each API method which is either added or changed should have the following:
+An /api directory is now included for REST API updates. Each API method which is either added or changed should have the following:
 
 * Specification for the method
 
@@ -133,7 +133,7 @@ Note that the schema should be defined as restrictively as
 possible. Parameters which are required should be marked as such and
 only under exceptional circumstances should additional parameters
 which are not defined in the schema be permitted (i.e.
-additionaProperties should be False).
+additionalProperties should be False).
 
 Reuse of existing predefined parameter types such as regexps for
 passwords and user defined names is highly encouraged.
