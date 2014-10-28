@@ -72,7 +72,16 @@ class TestTitles(testtools.TestCase):
 
         impl = 'Implementation'
         self.assertIn(impl, titles)
-        self.assertEqual(2, len(titles[impl]))
+        # NOTE(nikhil_k): Reviewers subsection is expected in specs
+        #which are not in the juno directory. One exception is the
+        #spec specs/juno/example.rst which is auto loaded from the
+        #template.rst file.
+        if (self.filename.startswith('specs/juno') and
+            self.filename != 'specs/juno/example.rst'):
+            self.assertEqual(2, len(titles[impl]), self.filename)
+        else:
+            self.assertEqual(3, len(titles[impl]), self.filename)
+            self.assertIn('Reviewers', titles[impl], self.filename)
         self.assertIn('Assignee(s)', titles[impl])
         self.assertIn('Work Items', titles[impl])
 
@@ -97,6 +106,7 @@ class TestTitles(testtools.TestCase):
                  filter(lambda x: not x.endswith('index.rst'),
                         glob.glob('specs/*/*')))
         for filename in files:
+            self.filename = filename
             self.assertTrue(filename.endswith(".rst"),
                             "spec's file must uses 'rst' extension.")
             with open(filename) as f:
