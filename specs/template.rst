@@ -257,7 +257,7 @@ efforts and status of the patch sets. A spec should have at least two
 reviewers.
 
 At least, one of the reviewers should be a core member in the corresponding
-project. This individual could also serve as a liasion for the developer(s);
+project. This individual could also serve as a liaison for the developer(s);
 thus providing them a better communication medium with the other core
 reviewers, as needed.
 
