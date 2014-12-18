@@ -51,8 +51,8 @@ We will preserve this order and then load ``glance-manage.conf``. We will only
 default to setting ``log_file`` in ``glance-manage.conf`` to prevent
 overriding settings from the other two files. We will also issue a deprecation
 warning pointing to this specification so that operators and end users know to
-configure ``glance-manage.conf`` for the L cycle. In the L cycle, we will stop
-depending on ``glance-registry.conf`` and ``glance-api.conf``. The
+configure ``glance-manage.conf`` for a later cycle. In that cycle, we
+will stop depending on ``glance-registry.conf`` and ``glance-api.conf``. The
 documentation should also immediately, starting in the K cycle, begin to
 instruct users to configure settings for ``glance-manage`` in
 ``glance-manage.conf``.
