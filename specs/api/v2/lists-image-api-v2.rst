@@ -40,11 +40,75 @@ only images that are between one and four megabytes in size.
 
 **Sorting**
 
-The results of this operation can be ordered using the 'sort\_key' and
-'sort\_dir' parameters. The API uses the natural sorting of whatever
-image attribute is provided as the 'sort\_key'. All image attributes can
-be used as the sort\_key (except tags and link attributes). The
-sort\_dir parameter indicates in which direction to sort. Acceptable
-values are 'asc' (ascending) and 'desc' (descending). Defaults values
-for sort\_key and sort\_dir are 'created\_at' and 'desc'.
+The results of this operation can be ordered by using classic and new
+sorting syntaxes. Classic syntax uses multiple 'sort\_key' and
+'sort\_dir' parameters, and new one accepts a single 'sort' string with
+comma separated sort keys with optional sort direction after ':'.
+Both syntaxes provide an ability to sort output with multiple keys and
+directions but with some differences.
+
+The classic syntax takes a list of keys and either exactly the same
+number of directions for each key, or only one that specifies the
+default value for all keys.
+The new syntax applies a default direction to all keys where it's
+missing.
+
+The API uses the natural sorting of whatever image attribute is
+provided as the sort key. List of image attributes can be used as the
+sort key: 'name', 'status', 'container\_format', 'disk\_format',
+'size', 'id', 'created\_at', 'updated\_at'. The sort dir parameter
+indicates in which direction to sort. Acceptable values are 'asc'
+(ascending) and 'desc' (descending). Default values for sort key and
+sort direction are 'created\_at' and 'desc'.
+
+Examples of sorting:
+
+
+#. New syntax with specified direction for keys::
+
+      sort=name:asc,status:asc
+
+   Sort: by name with asc order, then by status with asc order.
+
+#. New syntax with missing direction::
+
+      sort=name,status:asc
+
+   Sort: by name with desc order, then by status with asc order.
+
+#. New syntax without directions::
+
+      sort=name,status
+
+   Sort: by name with desc order, then by status with desc order.
+
+#. Classic syntax with specified default direction::
+
+      sort_key=name&sort_key=status&sort_dir=asc
+
+   Sort: by name with asc order, then by status with asc order.
+
+#. Classic syntax with missing direction::
+
+      sort_key=name&sort_key=status
+
+   Sort: by name with desc order, then by status with desc order.
+
+#. Classic syntax with missing key and specified default direction::
+
+      sort_dir=asc
+
+   Sort: by created_at with asc order.
+
+#. Classic syntax with specified direction for keys::
+
+      sort_key=name&sort_dir=desc&sort_key=status&sort_dir=asc
+
+   Sort: by name with desc order, then by status with asc order.
+
+#. Classic syntax with different number of keys and directions::
+
+      sort_key=name&sort_dir=asc&sort_key=status&sort_dir=asc&sort_key=id
+
+   Will be an error.
 
