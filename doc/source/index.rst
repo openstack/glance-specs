@@ -28,6 +28,14 @@ Liberty approved specs:
 
    specs/liberty/*
 
+Client approved specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/glanceclient/*
+
 ====================
 Image service V2 API
 ====================
@@ -63,7 +71,7 @@ Image service V1 API
     specs/api/v1/removing_a_member_from_an_image
     specs/api/v1/replacing_a_membership_list_for_an_image
     specs/api/v1/filtering_images_returned_via_get__images_and_get__images_detail
-    
+
 
 ==================
 Indices and tables
