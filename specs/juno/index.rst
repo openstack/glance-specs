@@ -1,5 +1,5 @@
 ====================
- Kilo Specifications
+ Juno Specifications
 ====================
 
 .. toctree::
