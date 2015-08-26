@@ -87,7 +87,7 @@ http://eavesdrop.openstack.org/meetings/api_wg/2015/api_wg.2015-02-19-00.00.log.
   * Description: Deactivate an image
   * Method: POST
   * Normal response code(s): 204
-  * Expected error http response code(s): 400
+  * Expected error http response code(s): 403
 
     * When calling deactivate on an image which is not currently in the 
       'active' or 'deactivated' state.
@@ -100,7 +100,7 @@ http://eavesdrop.openstack.org/meetings/api_wg/2015/api_wg.2015-02-19-00.00.log.
   * Description: Reactivate an image
   * Method: POST
   * Normal response code(s): 204
-  * Expected error http response code(s): 400
+  * Expected error http response code(s): 403
 
     * When calling reactivate on an image which is not currently
       in the 'deactivated' or 'active' state.
