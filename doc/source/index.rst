@@ -36,6 +36,14 @@ Client approved specs:
 
    specs/glanceclient/*
 
+Mitaka approved specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/mitaka/*
+
 ====================
 Image service V2 API
 ====================
