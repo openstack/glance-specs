@@ -18,6 +18,7 @@ Deploying authentication will protect image integrity by verifying that an
 image has not been modified after the upload by the user.  This feature
 improves the enterprise-ready posture of OpenStack.
 
+
 Problem description
 ===================
 
@@ -47,6 +48,7 @@ There are several use cases that this feature will support:
   a reference to the public key certificate to Nova along with the image so
   that Nova can verify the signature before booting the image.
 
+
 Proposed change
 ===============
 
@@ -69,18 +71,14 @@ Glance already supports computing checksums of images when an image is
 uploaded, and this checksum is stored with the image.  This same hash (which
 by default is MD5) will be used for the signature verification.
 
-Since the checksum hash is computed in glance_store (when the image data is
-uploaded), it makes sense for the signature verification to be computed in
-glance_store.  glance_store also has the mechanism to abort an image upload if
-a failure occurs.
-
-In order for the signature to be verified by the store backend, the backend
-must have access to the public key certificate and the signature.  The Glance
-frontend should use the reference to the public key certificate to retrieve
-the certificate from the key manager, and then pass this public key along with
-the signature to the backend. If the signature verification fails,
-glance_store will abort the change, allowing the user to update the signature
-property to a correct value before trying again.
+The checksum hash is computed in glance_store (when the image data is
+uploaded), and is then used to verify the signature.  The Glance frontend
+should use the reference to the public key certificate to retrieve the
+certificate from the key manager, and then use this public key along with the
+signature, the computed checksum, and the rest of the signature metadata to
+verify the signature.  If the signature verification fails, the image will
+transition to a killed state, and the user will be notified that the upload
+failed and given a reason why.
 
 Alternatives
 ------------
@@ -100,14 +98,6 @@ An alternative to storing a reference to the public key certificate in Glance
 would be to store the actual public key certificate in Glance.  However, this
 approach would be insecure, since Glance, unlike a dedicated key manager, has
 not been created with storing keys or certificates in mind.
-
-An alternative to performing the signature verification/creation in the
-glance_store backend is to only perform the hash creation in the backend, and
-perform the signature verification/creation in the Glance front end.  However,
-there is not a clean way to remove the uploaded image data from the backend,
-and if the user wants to update the signature and attempt another upload, this
-will cause duplication errors.  Since glance_store has a mechanism to abort a
-failed upload and remove data easily during an upload, it solves this issue.
 
 An alternative to using asymmetric keys for integrity and confidentiality is
 to use symmetric keys.  However, in order for Glance to be able to verify the
@@ -168,6 +158,9 @@ REST API impact
 No API changes will be needed for the initial implementation, provided that
 other services are able to retrieve all of the properties of a given image.
 
+Note that the existing API allows for providing the signature metadata as
+glance properties, and returning an error message if verification fails.
+
 Security impact
 ---------------
 
@@ -180,6 +173,10 @@ Glance.
 
 This change involves hashing the image data for use in verifying and creating
 signatures for the image.
+
+Note that the signature length is currently limited to 255 bytes, since this
+is the maximum size supported for glance properties.  In turn, this limits
+the size of the keys that can be used for signature creation.
 
 Notifications impact
 --------------------
@@ -210,18 +207,13 @@ performance.
 Other deployer impact
 ---------------------
 
-In order to handle the communication between Glance and glance_store, more
-parameters will need to be included in the call to add an image to the backend
-(including the public key certificate and signature) and in what is returned
-by glance_store.  The result is that there will be cross-project dependencies
-between glance and glance_store.
+None.
 
 Developer impact
 ----------------
 
-Every store in the glance_store backend would be required to support
-creating a hash for the image signature verification when the
-checksum is created, using the hash appropriately to verify the signature.
+None.
+
 
 Implementation
 ==============
@@ -262,8 +254,8 @@ Dependencies
 
 The cryptography library, which will be used for hash creation and signature
 verification and creation, is already a part of the global-requirements of
-OpenStack.  However, it is not a part of glance or glance_store, and will
-need to be added there.
+OpenStack.  However, it is not a part of glance, and will need to be added
+there.
 
 Glance currently does not interact with any key managers.  Since a key manager
 is needed to manage the keys, changes will need to be made to allow Glance to
@@ -276,6 +268,7 @@ In order to take advantage of the signatures in Glance, Nova will need to
 be updated to retrieve the signatures from Glance and verify them.  However,
 Glance does not depend on Nova to have this support in order to have the
 feature added.  The spec for this in Nova [4] has not yet been approved.
+
 
 Testing
 =======
@@ -291,6 +284,25 @@ Documentation Impact
 Instructions for how to use the change will need to be documented.  These
 include instructions for the user on how to create keys and signatures
 offline before providing this information during the creation of an image.
+
+This documentation will also include descriptions for each of the following
+signature metadata properties:
+
+* signature: the signature of the "checksum hash" encoded in base64 format
+* signature_hash_method: the hash method used to create the signature
+* signature_key_type: the key type used in creating the signature
+
+  - valid values are: "RSA-PSS"
+
+* signature_certificate_uuid: the uuid used to retrieve the certificate from
+  castellan
+* mask_gen_algorithm: only used for RSA-PSS, defines the mask generation
+  algorithm used in the signature generation, optional and defaults to "MGF1"
+
+  - valid values are: "MGF1"
+
+* pss_salt_length: only used for RSA-PSS, defines the salt length used in the
+  signature generation, optional and defaults to PSS.MAX_LENGTH
 
 
 References
