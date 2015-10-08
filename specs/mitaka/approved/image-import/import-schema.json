@@ -1,0 +1,75 @@
+{
+    "id": "http://openstack.org/glance/import/request/schema#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "OpenStack Glance image import request schema.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "method",
+        "source_disk_format",
+        "source_container_format",
+        "target_disk_format",
+        "target_container_format"
+    ],
+    "properties": {
+        "method": {
+            "type": "object",
+            "oneOf": [
+                { "$ref": "#/definitions/glance-direct" },
+                { "$ref": "#/definitions/swift-local" }
+            ]
+        },
+        "source_disk_format": {
+            "enum": [ "vhd", "vmdk", "raw" ],
+            "description": "The disk format of the data to be imported."
+        },
+        "source_container_format": {
+            "enum": [ "bare", "ovf" ],
+            "description": "The container format of the data to be imported.  If no container, use 'bare'."
+        },
+        "target_container_format": {
+            "enum": [ "ova" ],
+            "description": "The container format of the image that will be stored in Glance."
+        },
+        "target_disk_format": {
+            "enum": [ "vhd" ],
+            "description": "The disk format of the image that will be stored in Glance."
+        },
+        "os_type": {
+            "enum": [ "linux", "windows" ],
+            "description": "The type of the operating system contained in the image."
+        }
+    },
+    "definitions": {
+        "glance-direct": {
+            "properties": {
+                "name": {
+                    "enum": [ "glance-direct" ],
+                    "description": "Identifier for this import-method."
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "additionalProperties": false
+        },
+        "swift-local": {
+            "properties": {
+                "name": {
+                    "enum": [ "swift-local" ],
+                    "description": "Identifier for this import-method."
+                },
+                "swift-location": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Name of the Swift object to be imported in container/name format."
+                }
+            },
+            "required": [
+                "name",
+                "swift-location"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

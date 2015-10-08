@@ -1,0 +1,11 @@
+{
+    "method": {
+        "name": "swift-local",
+        "swift-location": "import-data/my_image.raw"
+    },
+    "source_disk_format": "raw",
+    "source_container_format": "bare",
+    "target_disk_format": "vhd",
+    "target_container_format": "ova",
+    "os_type": "linux"
+}

@@ -1,0 +1,57 @@
+{
+    "max_upload_bytes": {
+        "description": "You may not upload more than this number of bytes when importing a virtual disk.",
+        "type": "integer",
+        "value": 10737418240
+    },
+    "max_virtual_bytes": {
+        "description": "You may not upload a virtual disk whose virtual size exceeds this number of bytes.",
+        "type": "integer",
+        "value": 26843545600
+    },
+    "max_upload_time": {
+        "description": "You only have this much time to complete your data upload.  Expressed in seconds.  (Does not apply to the 'swift-local' import method.)",
+        "type": "integer",
+        "value": 600
+    },
+    "data_TTL_after_import_error": {
+        "description": "If an error occurs when you issue the command to import this data, your uploaded data is subject to deletion after this amount of time.  Expressed in hours.  (Does not apply to the 'swift-local' import method.)",
+        "type": "integer",
+        "value": 6
+    },
+    "source_container_format": {
+        "description": "Your image data must be in one of these container formats.",
+        "type": "array",
+        "value": [ "bare" ]
+    },
+    "source_disk_format": {
+        "description": "Your image data must be in one of these disk formats.",
+        "type": "array",
+        "value": [ "vhd", "vmdk", "raw" ]
+    },
+    "target_container_format": {
+        "description": "Your image will be saved in Glance in one of these container formats.",
+        "type": "array",
+        "value": [ "ova" ]
+    },
+    "target_disk_format": {
+        "description": "Your image will be saved in Glance in one of these disk formats.",
+        "type": "array",
+        "value": [ "vhd" ]
+    },
+    "os_type" : {
+        "description": "Operating systems allowed for import.  Some operating systems may be non-importable due to licensing constraints.",
+        "type": "array",
+        "value": [ "linux", "windows" ]
+    },
+    "import-methods": {
+        "description": "Import methods available at this site.",
+        "type": "array",
+        "value": [ "glance-direct", "swift-local" ]
+    },
+    "import-schema-location": {
+        "description": "Location of the JSON schema for the image import request/response.",
+        "type": "string",
+        "value": "v2/schemas/import"
+    }
+}
