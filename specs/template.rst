@@ -118,7 +118,7 @@ An /api directory is now included for REST API updates. Each API method which is
       inconsistent parameters supplied to the method, or when an
       instance is not in an appropriate state for the request to
       succeed. Errors caused by syntactic problems covered by the JSON
-      schema defintion do not need to be included.
+      schema definition do not need to be included.
 
   * URL for the resource
 
