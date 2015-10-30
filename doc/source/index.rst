@@ -1,8 +1,24 @@
 .. glance-specs documentation master file
 
 =====================================
-Image Service Specifications (glance)
+Image Service (Glance) Plans
 =====================================
+
+Priorities
+==========
+
+During each design summit, we agree on what the whole community wants
+to focus on for the upcoming release. This is the output of those
+discussions:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   priorities/*
+
+Specifications
+==============
 
 Juno approved specs:
 
