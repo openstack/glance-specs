@@ -24,7 +24,7 @@ Problem description
 
 There is no method for users to verify that a previously uploaded image has
 not been modified.  An image could potentially be modified in transit (such as
-when it is uploaded to glance or transferred to nova) or glance itself could
+when it is uploaded to Glance or transferred to Nova) or Glance itself could
 be untrusted and modify images without a user's knowledge.  An image that is
 modified could include malicious code.  Providing support for image signatures
 and signature verification would allow the user to verify that an image has
@@ -57,7 +57,7 @@ Glance to store the metadata items needed for image signing and verification.
 These include a public key certificate reference, and the signature.  These
 are provided when the image is created, and are accessible when the image is
 uploaded.  Note that this proposed change will only support image uploads with
-the glance api v2 (and will not support using the glance api v1).  Also note
+the Glance API v2 (and will not support using the Glance API v1).  Also note
 that multiple formats for the key (such as SubjectPublicKeyInfo) and for the
 signature (such as PSS) will be supported.  The format of the signature will
 be stored as one of the properties.
@@ -159,7 +159,7 @@ No API changes will be needed for the initial implementation, provided that
 other services are able to retrieve all of the properties of a given image.
 
 Note that the existing API allows for providing the signature metadata as
-glance properties, and returning an error message if verification fails.
+Glance properties, and returning an error message if verification fails.
 
 Security impact
 ---------------
@@ -175,7 +175,7 @@ This change involves hashing the image data for use in verifying and creating
 signatures for the image.
 
 Note that the signature length is currently limited to 255 bytes, since this
-is the maximum size supported for glance properties.  In turn, this limits
+is the maximum size supported for Glance properties.  In turn, this limits
 the size of the keys that can be used for signature creation.
 
 Notifications impact
@@ -254,7 +254,7 @@ Dependencies
 
 The cryptography library, which will be used for hash creation and signature
 verification and creation, is already a part of the global-requirements of
-OpenStack.  However, it is not a part of glance, and will need to be added
+OpenStack.  However, it is not a part of Glance, and will need to be added
 there.
 
 Glance currently does not interact with any key managers.  Since a key manager
@@ -311,6 +311,9 @@ References
 cryptography: https://cryptography.io/en/latest/
 
 [1] http://goo.gl/Y3u3lK
+
 [2] https://review.openstack.org/191542
+
 [3] http://git.openstack.org/cgit/openstack/castellan
+
 [4] https://review.openstack.org/#/c/188874/
