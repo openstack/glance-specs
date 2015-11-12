@@ -16,7 +16,7 @@ exists, otherwise, create a new one.
 Problem description
 ===================
 
-If glance backend database is not MySQL or postgreSQL,the unique constraint
+If glance backend database is not MySQL or PostgreSQL,the unique constraint
 of image-member only includes image-id and member. In this case, if an
 image-member is deleted, then create it again with the same parameters, glance
 initiates a query to see if there is already an existing one, but the
@@ -36,8 +36,8 @@ exists, otherwise, create a new one.
 Alternatives
 ------------
 Unify the unique constraint for image-member like we did for MySQL and
-postgreSQL in 022_image_member_index.py, it has migrated unique constraint of
-image-member for MySQL and postgreSQL, now its unique constraint includes
+PostgreSQL in 022_image_member_index.py, it has migrated unique constraint of
+image-member for MySQL and PostgreSQL, now its unique constraint includes
 image-id, member and deleted_at. Currently the column "deleted_at" is
 nullable. For other databases like DB2, its unique constraint is more
 restricted than MySQL. The columns under unique constrains should be
@@ -50,7 +50,7 @@ an active member with a no-blank timestamp for "deleted_at" would confuse
 user.
 
 Another solution is migrating the unique constraint from (image-id, member,
-deleted_at) to (image-id, member,created_at) for MySQL and postgreSQL, from
+deleted_at) to (image-id, member,created_at) for MySQL and PostgreSQL, from
 (image-id, member) to (image-id, member,created_at) for other databases.
 created_at is not nullable, so the new constraint will be applicable to all
 databases. This solution needs data migration for different database.
