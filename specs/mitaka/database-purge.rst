@@ -128,14 +128,14 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  mmagr
+* mmagr
 
 Reviewers
 ---------
 
 Core reviewer(s):
-  flaper87
-  nikhil-komawar
+* flaper87
+* nikhil-komawar
 
 Other reviewer(s):
   None
