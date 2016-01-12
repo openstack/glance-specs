@@ -26,7 +26,7 @@ Juno approved specs:
    :glob:
    :maxdepth: 1
 
-   specs/juno/*
+   specs/juno/index
 
 Kilo approved specs:
 
@@ -34,7 +34,7 @@ Kilo approved specs:
    :glob:
    :maxdepth: 1
 
-   specs/kilo/*
+   specs/kilo/index
 
 Liberty approved specs:
 
@@ -42,7 +42,7 @@ Liberty approved specs:
    :glob:
    :maxdepth: 1
 
-   specs/liberty/*
+   specs/liberty/index
 
 Client approved specs:
 
