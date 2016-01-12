@@ -20,31 +20,18 @@ discussions:
 Specifications
 ==============
 
-Juno approved specs:
+Glance specs:
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
    specs/juno/index
-
-Kilo approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
    specs/kilo/index
-
-Liberty approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
    specs/liberty/index
+   specs/mitaka/*
 
-Client approved specs:
+Client specs:
 
 .. toctree::
    :glob:
@@ -52,13 +39,7 @@ Client approved specs:
 
    specs/glanceclient/*
 
-Mitaka approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/mitaka/*
+   
 
 ====================
 Image service V2 API
