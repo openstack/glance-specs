@@ -234,7 +234,7 @@ end-user with sufficient information to perform an image import.
     :linenos:
     :language: json
 
-.. note :: Why different ``source_*`` and ``target_*`` formats?
+.. note :: Should we allow users for sending `target_*` fields?
 
    Suppose the end-user needs the image to be in a different format to use a
    particular flavor or availability zone. We could handle this by introducing
@@ -284,10 +284,10 @@ The response is the following JSON schema.
     :linenos:
     :language: json
 
-Note that the values for ``source_disk_format``, ``source_container_format``,
-``target_disk_format``, and ``target_container_format`` will be pulled from
-configuration options used to supply values for the *value discovery* call.
-This will allow an end-user to do accurate schema-validation on the request.
+Note that the values for ``source_disk_format`` and ``source_container_format``
+will be pulled from configuration options used to supply values for the *value
+discovery* call. This will allow an end-user to do accurate schema-validation on
+the request.
 
 .. note :: I haven't addressed Stuart's question "Do we need to have both
    'global' and disk format specific parameters?"  The question appears on the
