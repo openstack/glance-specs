@@ -508,11 +508,170 @@ example (``swift-local`` method)
     :language: json
 
 Alternatives
-------------
+============
 
-Do nothing and use the current upload workflow.
+Here we consider some alternatives for 'native' (non-Swift) upload.
 
-Use the Glance "tasks" API.
+Use existing native v2 upload
+-----------------------------
+
+We could use the existing synchronous v2 upload call, namely:
+
+``PUT v2/images/{image_id}/file``
+
+Advantages:
+
+* No impact on existing API users.
+
+Disadvantages:
+
+* Rules out long lived validation/processing.
+
+Change existing native v2 upload to be asynchronous
+---------------------------------------------------
+
+(This would include adding some simple discoverability call.)
+
+Advantages:
+
+* Small change from existing behaviour. May not impact all use cases.
+
+Disadvantages:
+
+* Changes existing API behaviour. Not considered backwards compatible.
+* Users/libraries must change to expect non-synchronous behaviour.
+
+Asynchronous upload call
+------------------------
+
+This would be a tweak to the existing v2 upload call, to make it asynchronous --
+but in a backwards compatible way. Backwards compatibility could be achieved by
+either using a different resource path, adding a header, or using a query parameter.
+(This would include adding some simple discoverability call.)
+
+Advantages:
+
+* Very similar to existing upload mechanism.
+* Still just two API calls (``POST``, ``PUT``)
+* No new image states are required.
+
+Disadvantages:
+
+* Initially uploaded data is not cached for retry. (Same as existing upload.)
+* Users/libraries are expected to switch to the new method.
+* Slightly different work-flow than 'non-native' imports (ie imports from external sources)
+
+Independent fileIds
+-------------------
+
+Here, the uploaded bytes are not initially part of a particular
+image. This would work the same way as the import-from-Swift case,
+in that fileId operations are kept separate from image operations
+in a similar way that Swift object operations are kept seperate
+from image operations.
+
+First you upload the bytes with a ``POST``. This stores the bytes and
+generates a unique fileId. At this point the bytes are not 'part' of
+any image. You then make a call for an image to consume that fileId
+(analogous to consuming a Swift object). You then (optionally) delete
+the original fileId.
+
+This could be implemented in slightly different ways.
+
+* A fileId could be completely unassociated with any image, in which
+  case it could be reused as source data for more than one image.
+* Alternatively the fileId could be restricted to a particular image by
+  requiring the image uuid to be specified when creating the fileId. In
+  both cases, the only time a fileId would impact image state is when the
+  image is consuming the fileId and goes through the usual ``queued``,
+  ``saving``, ``active`` stages.
+
+Advantages:
+
+* Swift and Glance work in the same way. (Initial data is not considerd
+  'part' of the image.)
+* Can be extended to uploading several fileIds sequentially or in
+  parallel.
+* fileIds are cached for retry if the import fails
+* fileIds can each have their own size and checksum (for quota/integrity)
+* seperation of concerns (less impact on existing code areas, eg image
+  delete would never have to handle deleting more than one data blob.)
+* No new image states are required.
+
+Disadvantages:
+
+* More code, eg to list fileIds
+* More API calls than the simple async upload case
+* Users/libraries are expected to switch to the new method.
+
+Asynchronous upload call and Independent fileIds
+------------------------------------------------
+
+These two options could be combined. 'Asynchronous upload' would provide a
+'simple' call for the common simple upload case, 'independent fileIds'
+would provide a more involved set of calls for parallel/segmented
+upload. (There are examples elsewhere of of having a simple call for
+the basic case and more advanced calls for more advanced functionality,
+eg regular Swift upload versus Swift Large Object upload.)
+
+Advantages:
+
+* Simple API available for standard uploads
+* More advanced APIs available to those who need them
+* Could implement the simple case first
+
+Disadvantages:
+
+* More code
+* Users/libraries are expected to switch to the new method.
+
+
+URL nomination
+--------------
+
+Glance could nominate an opaque URL for the data to be PUT to.
+For example, the POST request could return:
+
+put-data-to: https://example.com/xxx
+
+If Swift is available the URL would be a Swift TempURL, if Swift is not
+available the URL would point to an appropriate Glance URL.  As far as
+I know Swift's TempURL allows range offset so parallel uploads/partial
+retries should work.
+
+Advantages:
+
+* Nice and RESTFul
+* Almost equivalent behaviour whether Swift is in use or not
+
+Disadvantages:
+
+* Swift TempURLs limit upload sizes (5GB by default). (Changes to Swift would be required.)
+
+* A user may have pre-existing image data in Swift. That case would need
+  to be handled anyway.
+* In the Swift TempURL case no token header is required to be sent with
+  the data. In the Glance case a token header would be required (unless we
+  added TempURL type functionality to Glance). So the two things would not
+  be completely equivalent. You'd have to know whether you're sending to
+  Glance or Swift -- or at least whether to send a token or not. You could
+  potentially just send the token in both cases, but that's a little untidy
+  (eg principle of least privilege).
+* Would require a special account for Swift imports (this would be the
+  upload target), even in multi-tenant store mode because it may not be
+  safe to nominate a URL in the user's own account.
+* While (I think) parallel uploads/partial retries are possible with
+  Swift's TempURL they could only be attempted if it was known that the
+  target was Swift, ie if the URL isn't opaque. So we'd be back to having
+  to know which service we're sending the data to. (Unless we forfeited
+  some of Swift's advantages.)
+
+
+Use existing tasks API
+----------------------
+
+This works when Swift is present, but doesn't provide a way
+to do an asynchronous 'native' upload.
 
 Out of scope
 ------------
