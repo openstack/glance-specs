@@ -30,6 +30,7 @@ Glance specs:
    specs/kilo/index
    specs/liberty/index
    specs/mitaka/*
+   specs/newton/*
 
 Client specs:
 
