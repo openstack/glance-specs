@@ -1,21 +1,30 @@
-==================================
+===============================
 OpenStack Glance Specifications
-==================================
+===============================
 
 This git repository is used to hold approved design specifications for additions
 to the Glance project. Reviews of the specs are done in gerrit, using a
 similar workflow to how we review and merge changes to the code itself.
 
-The layout of this repository is::
+The general layout of this repository is::
 
   specs/<release>/
 
 You can find an example spec in `specs/template.rst`.
 
-Specifications are proposed for a given release by adding them to the
-`specs/<release>` directory and posting it for review.  The implementation
-status of a blueprint for a given release can be found by looking at the
-blueprint in launchpad.  Not all approved blueprints will get fully implemented.
+Beginning with the Mitaka release, there is a further subdivision into
+
+  specs/<release>/approved
+  specs/<release>/implemented
+
+A specification is proposed for a given release by adding it to the
+`specs/<release>/approved` directory and posting it for review.  The
+implementation status of a blueprint for a given release can be found by
+looking at the blueprint in launchpad.  Not all approved blueprints will get
+fully implemented.
+
+When a feature has been completed, its specification will be moved to the
+'implemented' directory for the release in which it was implemented.
 
 Specifications have to be re-proposed for every release.  The review may be
 quick, but even if something was previously approved, it should be re-reviewed
