@@ -130,6 +130,127 @@ a cloud).  What we aim to do in this spec is to define a suitable end-user
 image import mechanism that will satisfy the requirements of all OpenStack
 clouds, whether small or large, public or private.
 
+Summary of the Constraints Around This Project
+==============================================
+
+Here are, to the best of my recollection, what was agreed upon between the
+Glance community, DefCore (mostly Doug Hellman), infra (mostly Monty), and
+various interested parties who showed up at the design session on image import
+at the Tokyo summit.
+
+First, background, so you can see what problems needed to be addressed:
+
+#. (At least some) Public cloud operators do not want to expose the current
+   glance v1/v2 image upload as it is too fragile.
+
+#. The TC passed a resolution in December 2015 [NEW1]_ saying that end user
+   image upload (what we -- following industry parlance -- are calling "image
+   import") must be available in OpenStack clouds.
+
+   #. The TC resolution says that an OpenStack cloud should support import of a
+      vanilla linux image; no mandate about image format, size, etc.
+
+   #. Part of the goal of this spec is design a discoverable and interoperable
+      API for image import so that the TC resolution can be satisfied and image
+      import can be included as a DefCore requirement.  (See [NEW2]_ for more
+      about this point.)
+
+#. The "Tasks" API is a disaster from the interoperability and discoverability
+   standpoint.  (We know this because at least one large public cloud has
+   exposed image import via Glance Tasks, and the openstack infra team has a
+   lot to say about how bad it is.  Just ask them.)
+
+   #. interoperability failures: The Task object, as defined by
+      ``v2/schemas/task`` contains an "input" and "result" element which are
+      defined to be JSON blobs; anything could go in there, so possibly
+      radically different stuff for each OpenStack cloud
+
+   #. discoverability failures: You don't have to support a particular
+      disk/container format, but there must be a way to find out what a
+      particular cloud supports (and this "way" should be the same for all
+      openstack clouds, and no, documentation doesn't count)
+
+#. There are three cases for "image upload" that Glance should support.
+
+   #. Admin upload of "base" or "public" images
+
+   #. Image upload from OpenStack services (for example, Nova or Cinder)
+
+   #. End user image import
+
+.. note:: My view is that we are working on the image import use case, and what
+          we come up with there could, but doesn't have to, be used/usable for
+          the other two use cases.  The key point to keep in mind here is that
+          the discovery of various vulnerabilities may cause operators to halt
+          import (temporarily), and they will want to do that while still
+          keeping the other 2 use cases operational.
+
+          As Doug pointed out on a previous patch: "It would be nice to have
+          only one API, but the hole we have right now is the public-facing use
+          case and so that's where the focus of this work should be. If we can
+          make the results work for the other cases, that's a bonus, but not
+          required."
+
+OK, without further ado, here's what was agreed upon:
+
+The constraints that an adequate image import solution must meet
+----------------------------------------------------------------
+
+#. There must be a well-defined image import structure/framework that should be
+   supportable by all OpenStack clouds.
+
+   #. "well-defined"
+
+      #. calls have request/response schemas that are discoverable
+
+      #. the values that will enable a client to have a successful image import
+         (e.g., supported formats) must be discoverable
+
+      #. "discoverable" == via API call (in what Flavio calls a
+         "follow-your-nose" fashion)
+
+         #. specific API request: this would be the ``GET v2/info/import`` call
+
+         #. available in headers: the headers would be returned with the ``POST
+            v2/images`` response.  The idea is that the content of that
+            response is the JSON representation of the Image record (so the
+            import methods available and other associated import information
+            don't really belong in a particular ``image`` resource), and having
+            the info come back in the headers could allow a client to determine
+            the import method to use without having to make the discovery call.
+
+   #. "supportable by all OpenStack clouds"
+
+      #. it's acceptable for there to be multiple import methods as long as
+         each is well defined.  (See the "Proposed Change" section below for
+         details.  An "import method" has to do with how the image data is
+         delivered to Glance.  The API calls won't change, and their body and
+         structure will remain the same for the various methods.)
+
+      #. no cloud has to support all import methods, but it's expected that to
+         achieve certification as "OpenStack Powered Compute" (and hence, to
+         even have a shot at certification as an "OpenStack Powered Platform"),
+         a cloud must expose at least one of these.
+
+   #. Since Swift is not part of the "OpenStack Powered Compute" program,
+      Glance must expose at least one import method that does not rely upon the
+      presence of an end-user-accessible object store.
+
+#. The "three step dance" import style was deemed acceptable
+
+   #. one: create image record, two: upload data, three: import call
+
+   #. steps one and two can be independent.  For example, in the 'swift-local'
+      method sketched out below, an end user could upload the image data to
+      swift first (accomplishing step two), then do step one, followed by step
+      three.
+
+#. The import workflow should allow for server-side operator customization, but
+   no operator is required to perform such customization.
+
+   #. We're talking about customization in processing the uploaded data.  The
+      API request/response structure is not customizable.
+
 Proposed change
 ===============
 
@@ -766,3 +887,5 @@ References
 .. [OSW2] https://wiki.openstack.org/wiki/Glance-tasks-api-product
 .. [OSW3] https://wiki.openstack.org/wiki/Glance-tasks-import
 .. [OSW4] https://wiki.openstack.org/wiki/Glance-upload-mechanism-reloaded
+.. [NEW1] https://governance.openstack.org/resolutions/20151211-bring-your-own-kernel.html
+.. [NEW2] https://github.com/openstack/defcore/commit/10562c245a6332f52cb5c5d15739dfab15b2baa6
