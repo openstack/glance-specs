@@ -8,8 +8,6 @@
         "method",
         "source_disk_format",
         "source_container_format",
-        "target_disk_format",
-        "target_container_format"
     ],
     "properties": {
         "method": {
@@ -26,14 +24,6 @@
         "source_container_format": {
             "enum": [ "bare", "ovf" ],
             "description": "The container format of the data to be imported.  If no container, use 'bare'."
-        },
-        "target_container_format": {
-            "enum": [ "ova" ],
-            "description": "The container format of the image that will be stored in Glance."
-        },
-        "target_disk_format": {
-            "enum": [ "vhd" ],
-            "description": "The disk format of the image that will be stored in Glance."
         },
         "os_type": {
             "enum": [ "linux", "windows" ],
