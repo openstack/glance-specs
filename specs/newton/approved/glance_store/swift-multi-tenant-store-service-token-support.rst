@@ -1,0 +1,1 @@
+../../../mitaka/approved/swift-multi-tenant-store-service-token-support.rst
