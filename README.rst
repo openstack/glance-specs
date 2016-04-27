@@ -12,7 +12,7 @@ The general layout of this repository is::
 
 You can find an example spec in `specs/template.rst`.
 
-Beginning with the Mitaka release, there is a further subdivision into
+Beginning with the Mitaka release, there is a further subdivision into::
 
   specs/<release>/approved
   specs/<release>/implemented
