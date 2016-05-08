@@ -988,8 +988,11 @@ Work Items
 * Make task api admin only:
   https://bugs.launchpad.net/glance/+bug/1527716
 
-* Mark the `/file` endpoint as deprecated for non-admin use
-  https://bugs.launchpad.net/glance/+bug/1528637
+* Document that `/file` is not recommended for public nodes.
+
+* Introduce policies so that the ``/file`` endpoint can be easily disabled for
+  operators following the recommendation above. The default setting for these
+  policies will **not** change the current behavior.
 
 * Contact the operators and product working groups about properties similar to
   ``os_type`` that should be included in the import request schema.
