@@ -256,27 +256,6 @@ Primary assignee:
 Other contributors:
   <launchpad-id or None>
 
-Reviewers
----------
-
-Who are the main point of contact for reviewing this piece of functionality?
-These individuals would have more familiarity with the active development
-efforts and status of the patch sets. A spec should have at least two
-reviewers.
-
-At least, one of the reviewers should be a core member in the corresponding
-project. This individual could also serve as a liaison for the developer(s);
-thus providing them a better communication medium with the other core
-reviewers, as needed.
-
-Core reviewer(s):
-  <launchpad-id or None>
-  <launchpad-id or None>
-
-Other reviewer(s):
-  <launchpad-id or None>
-  <launchpad-id or None>
-
 Work Items
 ----------
 

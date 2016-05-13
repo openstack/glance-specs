@@ -80,8 +80,7 @@ class TestTitles(testtools.TestCase):
             self.filename != 'specs/juno/example.rst'):
             self.assertEqual(2, len(titles[impl]), self.filename)
         else:
-            self.assertEqual(3, len(titles[impl]), self.filename)
-            self.assertIn('Reviewers', titles[impl], self.filename)
+            self.assertEqual(2, len(titles[impl]), self.filename)
         self.assertIn('Assignee(s)', titles[impl])
         self.assertIn('Work Items', titles[impl])
 
