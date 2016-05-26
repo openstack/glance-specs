@@ -34,6 +34,32 @@ Optionals (please remove this line and fill or remove the rest until End of Temp
 End of Template
 +++++++++++++++
 
+Use policy to control deleting deactivated images
+-------------------------------------------------
+
+:problem: Currently, a user is permitted to delete a 'deactivated'
+          image. Thus, if an image is suspected dangerous and deactivated
+          by an administrator, a user could nonetheless remove the data
+          before a security team has time to review it, thereby removing
+          evidence of any wrongdoing. This presents a problem for an
+          administrator who would like an investigation to take place.
+
+:solution: Introduce a policy check named ``delete_deactivated_image``
+           to govern whether a user is permitted to delete a 'deactivated'
+           image.
+
+:impacts: Adds a new policy. The default configuration will preserve
+          current behaviour, that is, all users will be permitted to
+          perform the action.
+
+:timeline: Expected to be merged within the N-2 time frame.
+
+:link: https://review.openstack.org/#/c/256381
+
+:assignee: Niall Bunting
+
+End of policy to control deleting deactivated images
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Add your Spec Lite before this line
 ===================================
