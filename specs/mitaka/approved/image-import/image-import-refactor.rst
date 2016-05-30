@@ -10,6 +10,10 @@ Image Import Refactor
 
 https://blueprints.launchpad.net/glance/+spec/image-import-refactor
 
+.. note:: This is a very long spec, so we've added a :ref:`FAQ` to cover some
+          common questions so that people can make better informed comments on
+          the implementation patches.
+
 In this spec we propose a refactoring of the current Glance image import
 process to meet the criteria of being discoverable, interoperable, and
 flexible.  The goal is to present a uniform interface for image import that
@@ -129,6 +133,8 @@ OpenStack service, or Glance administrators supplying public images for use in
 a cloud).  What we aim to do in this spec is to define a suitable end-user
 image import mechanism that will satisfy the requirements of all OpenStack
 clouds, whether small or large, public or private.
+
+.. _constraints:
 
 Summary of the Constraints Around This Project
 ==============================================
@@ -251,6 +257,8 @@ The constraints that an adequate image import solution must meet
    #. We're talking about customization in processing the uploaded data.  The
       API request/response structure is not customizable.
 
+.. _proposed-change:
+
 Proposed change
 ===============
 
@@ -343,6 +351,8 @@ it's expected that it will expose at least one.
 API changes
 -----------
 
+.. _value-discovery:
+
 value discovery
 ***************
 
@@ -393,6 +403,8 @@ summary
 * Parameters which can be passed via the URL: none
 * JSON schema definition for the body data: not allowed
 * JSON schema definition for the response data: none
+
+.. _format-discovery:
 
 format discovery
 ****************
@@ -627,6 +639,8 @@ example (``swift-local`` method)
 .. literalinclude:: import-request-example-sl.json
     :linenos:
     :language: json
+
+.. _alternatives:
 
 Alternatives
 ============
@@ -1025,6 +1039,176 @@ The following will need to be added to the glance developer docs.
 #. tasks info for deployers who want to use tasks (I suggest starting with this
    in the dev docs and then move it to one of the OpenStack operator manuals
    eventually)
+
+.. _FAQ:
+
+FAQ
+===
+
+Everything you always wanted to know about Glance Image Import but were afraid to ask.
+
+#.  What is the use case addressed?
+
+    A cloud end-user has a bunch of bits that they want to give to Glance in
+    the expectation that (in the absence of error conditions) Glance will
+    produce an Image (record, file) tuple that can subsequently be used by
+    other OpenStack services that consume Images.
+
+#.  Why is the "regular" upload insufficient?
+
+    Unlike taking a "snapshot" of a instance using the Compute API, where Nova
+    handles the image creation, packaging, basic cataloging, and uploading into
+    Glance, exposing image upload opens a cloud to human error (for example,
+    not a VM image, incorrect type of image for the hypervisors in that cloud,
+    maliciously packaged/structured image to attack the hypervisor) that
+    exposes a cloud to extra support load, denial of service, or security
+    concerns.
+
+    Plus, it's not just security issues.  Another common use case would be an
+    end user uploading an OVA that could be automatically unpacked and the
+    manifest introspected to set appropriate metadata on the image.  Or if
+    OpenStack were to agree to a common image interchange format, conversion of
+    the imported image might be required.
+
+#.  How are the above problems addressed by the proposed import process?
+
+    In contrast to "regular" upload, which puts the image data directly into
+    the storage backend, the image import process allows an operator to examine
+    the putative image and perform validation/conversion/packaging (or nothing)
+    before it's stored in the backend.
+
+#.  Doesn't this introduce unwanted variability into the import process?
+
+    No, it does not.  The API is fixed so that the API request and response
+    formats are identical in all OpenStack clouds.  The variability is behind
+    the scenes, after the user has made the data available to Glance but before
+    the image status goes to 'active'.
+
+    Note that while there are multiple import methods, each method is precisely
+    defined and schematized so that the API calls/responses are standard.
+
+#.  Why multiple methods?
+
+    This is a situation in which a one-size-fits-all approach doesn't really
+    work.  There are several issues that come into play that affect the user
+    experience of both end users and operators, for example, the size of the
+    images to be imported, the speed of available connections, the ability to
+    deploy extra upload nodes, the presence/absence of an object store, then
+    volume of end users doing image imports, the size of a cloud's operations
+    team, etc.  Some usage patterns can be accommodated by the method we're
+    calling 'glance-direct' whereby an end-user directly streams the object
+    into Glance; others might be better accommodated by import from an object
+    store whereby end users can make use of appropriate tooling to ensure a
+    good user experience when uploading large binary objects.  Since OpenStack
+    provides free software for an object store solution, and since Swift is
+    deployed in roughly half of all OpenStack clouds, we propose implementing a
+    'swift-local' import method in which the image data would be uploaded to
+    Swift out of band.
+
+    Additionally, in anticipation of the deprecation of the Images v1 API, some
+    operators have pointed out that the "copy-from" capability in the older API
+    is missing from the Images v2 API.  While it's not a driver for this work,
+    a well-defined copy-from import method can be accommodated by this design.
+
+    In short, the multiple import methods allow us to have a consistent and
+    discoverable API across clouds that will empower operators and end users to
+    offer/use the import methods that work best for them.
+
+#.  What if I don't like there being multiple import methods?
+
+    Believe me, we have thought about this carefully.  The alternative would be
+    to have different API calls for each of the different import methods.
+    That, however, would mitigate against the goal of having stable API calls
+    supported in all OpenStack-branded clouds, since not every cloud operator
+    will want to expose all import methods.  That would make it difficult for
+    image import to be in DefCore.
+
+    Let's be really careful in describing what we're talking about here.  The
+    approved design for image import allows operator choice, but in a very
+    constrained way.  As far as the end user is concerned, each import method
+    will operate identically in each OpenStack cloud, and we envision there
+    being a small number of these methods as each must make it through the
+    specs process and be implemented in-tree.  Thus it will be possible to code
+    a client to handle image import seamlessly from the end user point of view.
+
+#.  If there are multiple methods, must a cloud support them all in order to
+    achieve the "OpenStack" brand via DefCore?
+
+    This is ultimately up to the DefCore project.  Our idea is that since all
+    OpenStack clouds would support at least one of the import methods, all
+    OpenStack clouds would thereby have a working Images v2 API image import
+    facility, and could pass an image import requirement.
+
+#.  If there are multiple methods, how can I determine what's available in a
+    particular cloud?
+
+    This can be done programmatically. (a) The GET v2/info/import returns a
+    well-defined document that contains the list of import methods supported at
+    a particular site.  (b) A header that comes back from the POST v2/images
+    call also contains the list of import methods supported at the site.  See
+    the :ref:`value-discovery` section of this spec.
+
+#.  If there are multiple methods, how do I know what the request for the
+    method I want to use is supposed to look like?
+
+    There's a JSON schema with this information.  See :ref:`format-discovery`.
+
+#.  If there are multiple import methods, what's to stop someone from adding
+    more?
+
+    Additional methods would have to be proposed in a Glance spec and would
+    have to meet the discoverability and interoperability constraints we're
+    implementing for image import.  So it's not the kind of thing that can be
+    done lightly.
+
+#.  What about the old image upload call?
+
+    The PUT to v2/images/{image_id}/file makes sense as a call used by
+    operators and trusted services, so we are not proposing that it be removed.
+    We do, however, recommend that operators not expose it directly to end
+    users.
+
+#.  I have a question you haven't covered here.
+
+    Well, you could read through this entire spec.  But here are some pointers:
+
+    For details about the import workflow and API calls, start at the
+    :ref:`proposed-change` section.
+
+    If you want more background about why that workflow was chosen, you
+    need to read the beginning of this document.
+
+    If you want a quick summary of the design constraints, start at the
+    :ref:`constraints` section.
+
+#.  Wait, wasn't this spec approved for Mitaka?
+
+    Yes, it was.  It didn't get implemented because we wanted to make sure
+    there was a thorough exploration of :ref:`alternatives` before
+    implementation began.  The ultimate the consensus was that we should stick
+    with the original proposal.  The key point here is that the implementation
+    of this spec has not been rushed through by any means.
+
+#.  The image import spec is really, really long, but I can't get enough of it.
+    Where can I read even more?
+
+    The spec has a list of :ref:`references` you may find interesting.
+
+    There are also some recent etherpads:
+
+    - `Newton contributors' meeting: image import <https://etherpad.openstack.org/p/newton-glance-import-refactor>`_
+    - `Image Import MVP <https://etherpad.openstack.org/p/glance-image-import-implementation-tactics>`_
+
+    Additionally, you may find the discussion on the following patches
+    entertaining:
+
+    - https://review.openstack.org/232371
+    - https://review.openstack.org/271021
+    - https://review.openstack.org/270980
+    - https://review.openstack.org/311871
+
+
+.. _references:
 
 References
 ==========
