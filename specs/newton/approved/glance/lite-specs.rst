@@ -61,5 +61,30 @@ Use policy to control deleting deactivated images
 End of policy to control deleting deactivated images
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Add functionality to soft delete the tasks
+------------------------------------------
+
+:problem: Currently there is no mechanism for deleting tasks on regular
+          basis. Thus, if a task is expired; it still comes up on calling
+          task list or show. This can hamper the performance as the
+          number of tasks returned will be more than the number of
+          tasks that are active. Consequently, it will be tedious for
+          the user to manage them.
+
+:solution: Introduce a method which soft deletes the tasks by marking the
+           deleted status as true in the database; so that, on calling
+           task show or list, the expires tasks are not returned.
+
+:impacts: Adds a new method. Users will now get only the active tasks.
+
+:timeline: Expected to be merged within the N-2 time frame.
+
+:link: https://review.openstack.org/#/c/209255/
+
+:assignee: Geetika Batra
+
+End of Add functionality to soft delete the tasks
++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
