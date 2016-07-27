@@ -86,5 +86,30 @@ Add functionality to soft delete the tasks
 End of Add functionality to soft delete the tasks
 +++++++++++++++++++++++++++++++++++++++++++++++++
 
+Add `vhdx` to list of supported disk formats
+--------------------------------------------
+
+:problem: Glance currently support vhd disk formats and is being used in known
+          deployments. `vhdx` disks can have much larger storage capacity than
+          the older `vhd` format. More info can be found at offcial site
+          https://technet.microsoft.com/en-us/library/hh831446(v=ws.11).aspx
+
+:solution: `disk_formats` configuration option needs to be updated to indicate
+           that this is a acceptable format. Some documentation updates are
+           required showing the same and providing info about the official
+           documentation.
+
+:impacts: This will have documentation and upgrade impact. Release note should
+          be added to indicate interest parties about this addition.
+
+:timeline: Expected to be merged within the N-3 time frame.
+
+:link: https://review.openstack.org/#/c/347352
+
+:assignee: Stuart McLaren
+
+End of Add `vhdx` to list of supported disk formats
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
