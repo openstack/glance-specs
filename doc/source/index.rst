@@ -31,6 +31,7 @@ Glance specs:
    specs/liberty/index
    specs/mitaka/*
    specs/newton/*
+   specs/ocata/*
 
 Client specs:
 
@@ -40,7 +41,7 @@ Client specs:
 
    specs/glanceclient/*
 
-   
+
 
 ====================
 Image service V2 API
