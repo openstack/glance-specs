@@ -40,7 +40,7 @@ Client specs:
 
    specs/glanceclient/*
 
-   
+
 
 ====================
 Image service V2 API
