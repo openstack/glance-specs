@@ -10,8 +10,8 @@ on the resulting URL.
 
 Continuing from the example above, in order to get the memberships for
 the first public image returned, we can issue a ``GET`` request to the
-Glance server for ``http://glance.example.com/images/1/members``. What
-we will get back is JSON data such as the following:
+Glance server for ``http://glance.openstack.example.org/images/1/members``.
+What we will get back is JSON data such as the following:
 
 .. code::
 

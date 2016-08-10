@@ -12,12 +12,12 @@ to do two things:
 
 We can do the above two activities in a single call to the Glance API.
 Assuming, like in the examples above, that a Glance API server is
-running at ``glance.example.com``, we issue a ``POST`` request to add an
-image to Glance:
+running at ``glance.openstack.example.org``, we issue a ``POST`` request to
+add an image to Glance:
 
 .. code::
 
-    POST http://glance.example.com/images/
+    POST http://glance.openstack.example.org/images/
 
 The metadata about the image is sent to Glance in HTTP headers. The body
 of the HTTP request to the Glance API will be the MIME-encoded disk

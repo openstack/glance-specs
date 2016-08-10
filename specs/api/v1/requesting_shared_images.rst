@@ -4,7 +4,7 @@ Requesting Shared Images
 
 We want to see a list of images which are shared with a given tenant. We
 issue a ``GET`` request to
-``http://glance.example.com/shared-images/tenant1``. We will get back
+``http://glance.openstack.example.org/shared-images/tenant1``. We will get back
 JSON data such as the following:
 
 .. code::
