@@ -31,6 +31,7 @@ Glance specs:
    specs/liberty/index
    specs/mitaka/*
    specs/newton/*
+   specs/ocata/*
 
 Client specs:
 
