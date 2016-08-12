@@ -34,6 +34,30 @@ Optionals (please remove this line and fill or remove the rest until End of Temp
 End of Template
 +++++++++++++++
 
+Return 409 if setting location to saving or deactivated image
+-------------------------------------------------------------
+
+:problem: Currently, if 'show_multiple_locations' is activated,
+          user can set custom location to an image, even if it
+          has 'saving' or 'deactivated' status.
+          Example: http://paste.openstack.org/show/506998/
+
+:solution: Add a check, that looks at the image status and if it's
+           different from 'queued' or 'active' then returns Conflict
+           error (409 response code).
+
+:impacts: users will get Conflict error, when they try to set location
+          to image in 'saving' or 'deactivated' state.
+
+:timeline: Expected to be merged within the N-2 time frame.
+
+:link: https://review.openstack.org/#/c/324012/
+
+:assignee: Mike Fedosin
+
+Return 409 if setting location to saving or deactivated image
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Use policy to control deleting deactivated images
 -------------------------------------------------
 
