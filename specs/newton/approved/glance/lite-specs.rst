@@ -135,5 +135,54 @@ Add `vhdx` to list of supported disk formats
 End of Add `vhdx` to list of supported disk formats
 +++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Deprecate ``show_multiple_locations`` configuration option
+----------------------------------------------------------
+
+:problem: Glance currently has two ways in which locations can be
+          configured to be exposed to users :- 1) using
+          ``show_multiple_locations`` configuration option 2) Role Based Access
+          Control (RBAC) rules for ``delete_image_location``,
+          ``get_image_location``, ``set_image_location``. If a cloud operator
+          chooses to disable exposing multiple locations using 1), the approach
+          in 2) becomes redundant.  Also, it can be somewhat confusing for
+          operators to have multiple ways to tune a particular feature. If
+          proper defaults are set and documentation for setting appropriate
+          policies exists, configuration option ``show_multiple_locations``
+          doesn't hold much value.
+
+:solution: We choose to deprecate the configuration option
+           ``show_multiple_locations``. Moving forward the right way to control
+           the multiple locations feature will be using the Role Based Access
+           Control (RBAC) rules for Create, Read, Update and Delete (CRUD) on
+           locations. The ``policy.json`` file (example:
+           http://git.openstack.org/cgit/openstack/glance/tree/etc/policy.json)
+           should be used to govern the access a particular `role` has to the
+           location(s). This also ensures appropriate security measures are
+           taken into consideration by operators when using locations feature.
+           This encourages being aware of the kind of users this sensitive
+           feature will be exposed to rather than simple switching on/off a
+           single configuration option. However, for Newton release we will
+           only be deprecating the configuration option, no default values or
+           setting will be changed. Currently we disallow using multiple
+           locations by default, so the value of ``show_multiple_locations``
+           option will be kept as ``False``. We would like to give some time to
+           the operators to understand how to control multiple locations using
+           this new RBAC method. In Ocata, we will be changing the default
+           values of ``delete_image_location``, ``get_image_location`` and
+           ``set_image_location`` policies and will be removing
+           ``show_multiple_locations`` option from the tree.
+
+:impacts: This will have documentation and upgrade impact. Release note should
+          be added to notify interested parties about this addition.
+
+:timeline: Expected to be merged within the N-3 time frame.
+
+:link: https://review.openstack.org/#/c/313936/
+
+:assignee: Flavio Percoco
+
+End of Deprecate ``show_multiple_locations`` configuration option
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
