@@ -2,6 +2,8 @@
 Requesting Detailed Metadata on a Specific Image
 ================================================
 
+.. include:: deprecation-note.inc
+
 We want to see detailed information for a specific virtual machine image
 that the Glance server knows about.
 

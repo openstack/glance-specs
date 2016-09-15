@@ -2,6 +2,8 @@
 Image service v1 REST API
 =========================
 
+.. include:: deprecation-note.inc
+
 The OpenStack Image service offers retrieval, storage, and metadata
 assignment for your images that you want to run in your OpenStack cloud.
 The project is code-named Glance.

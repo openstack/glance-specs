@@ -63,6 +63,8 @@ Image service V2 API
 Image service V1 API
 ====================
 
+.. include:: specs/api/v1/deprecation-note.inc
+
 .. toctree::
     :maxdepth: 1
 

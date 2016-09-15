@@ -2,6 +2,8 @@
 Filtering Images Returned via GET /images and GET /images/detail
 ================================================================
 
+.. include:: deprecation-note.inc
+
 Both the ``GET /images`` and ``GET         /images/detail`` requests
 take query parameters that serve to filter the returned list of images.
 The following list details these query parameters.

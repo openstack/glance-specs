@@ -1,6 +1,8 @@
 Authentication
 --------------
 
+.. include:: deprecation-note.inc
+
 You can optionally integrate Glance with the OpenStack Identity Service
 project. Setting this up is relatively straightforward: the Identity
 Service distribution at http://github.com/openstack/keystone includes

@@ -2,6 +2,8 @@
 Adding a New Virtual Machine Image
 ==================================
 
+.. include:: deprecation-note.inc
+
 We have created a new virtual machine image in some way (created a
 "golden image" or snapshotted/backed up an existing image) and we wish
 to do two things:

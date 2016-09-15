@@ -2,6 +2,8 @@
 Retrieving a Virtual Machine Image
 ==================================
 
+.. include:: deprecation-note.inc
+
 We want to retrieve that actual raw data for a specific virtual machine
 image that the Glance server knows about.
 

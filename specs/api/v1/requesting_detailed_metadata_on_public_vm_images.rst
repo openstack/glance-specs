@@ -2,6 +2,8 @@
 Requesting Detailed Metadata on Public VM Images
 ================================================
 
+.. include:: deprecation-note.inc
+
 We want to see more detailed information on available virtual machine
 images that the Glance server knows about.
 

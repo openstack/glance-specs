@@ -2,6 +2,8 @@
 Requesting Shared Images
 ========================
 
+.. include:: deprecation-note.inc
+
 We want to see a list of images which are shared with a given tenant. We
 issue a ``GET`` request to
 ``http://glance.example.com/shared-images/tenant1``. We will get back

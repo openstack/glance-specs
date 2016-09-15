@@ -2,6 +2,8 @@
 Adding a Member to an Image
 ===========================
 
+.. include:: deprecation-note.inc
+
 We want to authorize a tenant to access a private image. We issue a
 ``PUT`` request to
 ``http://glance.example.com/images/1/members/tenant1``. With no body,

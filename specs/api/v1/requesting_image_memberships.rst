@@ -2,6 +2,8 @@
 Requesting Image Memberships
 ============================
 
+.. include:: deprecation-note.inc
+
 We want to see a list of the other system tenants (or users, if
 "owner\_is\_tenant" is False) that may access a given virtual machine
 image that the Glance server knows about. We take the \`uri\` field of
