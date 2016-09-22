@@ -118,5 +118,40 @@ Add `ploop` to the list of supported disk formats
 End of Add `ploop` to list of supported disk formats
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Use ``Range`` HTTP header instead of ``Content-Range`` for parsing requests
+---------------------------------------------------------------------------
+
+:problem: When a HTTP request for a partial image download is sent, currently
+          the ``Content-Range`` header is parsed to get the byte range from the
+          request. Per RFC 7233 specification, the desired byte range
+          should be specified in HTTP requests using the ``Range`` header
+          rather than the ``Content-Range`` header. The latter is reserved for
+          responses to such requests. Current implementation requires users to
+          send requests that are not compatible with this specification.
+          For example, a user has to give "bytes 12-30/32" instead of
+          "bytes=12-32".
+
+:solution: Parse the ``Range`` header from HTTP requests and send a
+           ``Content-Range`` entity header with the server response.
+           Deprecate and retain the current support for ``Content-Range``
+           header requests for backward compatibility reasons.
+
+:impacts: Users will be able to send partial download requests using the
+          ``Range`` header in the requests with the appropriate value formats.
+          For developers, the ``Range`` webob parser does not have a length
+          attribute. We will have to pass the image size explicitly and perform
+          checks to identify an unsatisfiable byte range request from the
+          parsed ``Range`` header. This change will also require an API
+          version bump.
+
+:timeline: Expected to be merged within the Ocata time frame.
+
+:link: https://review.openstack.org/#/c/367528/
+
+:assignee: Dharini Chandrasekar
+
+Use ``Range`` HTTP header instead of ``Content-Range`` for parsing requests
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
