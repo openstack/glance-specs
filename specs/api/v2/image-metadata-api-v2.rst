@@ -106,7 +106,7 @@ Add an image tag
 
 **PUT /v2/images/{image\_id}/tags/{tag}**
 
-The the tag you want to add should be encoded into the request URI. For
+The tag you want to add should be encoded into the request URI. For
 example, to tag image e7db3b45-8db7-47ad-8109-3fb55c2c24fd with
 'miracle', you would **PUT
 /v2/images/e7db3b45-8db7-47ad-8109-3fb55c2c24fd/tags/miracle**. The

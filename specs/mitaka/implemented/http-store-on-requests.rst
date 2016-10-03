@@ -11,7 +11,7 @@
 https://blueprints.launchpad.net/glance/+spec/http-store-on-requests
 
 Currently, the ``glance_store`` uses ``httplib`` to talk to the backing HTTP
-Store. In the case where the the store is served over plain-text (``http://``)
+Store. In the case where the store is served over plain-text (``http://``)
 this isn't an issue. In the event that the store is served over TLS
 (``https://``) then the connection was not verified by ``httplib``.  In
 order to provide verification of the connection on all versions of Python,
@@ -21,7 +21,7 @@ Problem description
 ===================
 
 Currently, the ``glance_store`` uses ``httplib`` to talk to the backing HTTP
-Store. In the case where the the store is served over plain-text (``http://``)
+Store. In the case where the store is served over plain-text (``http://``)
 this isn't an issue. In the event that the store is served over TLS
 (``https://``) then the connection was not verified by ``httplib`` [#]_.
 If an operator is serving their store over HTTPS, they may be expecting Glance

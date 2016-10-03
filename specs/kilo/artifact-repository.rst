@@ -390,7 +390,7 @@ appropriate API calls or specify the location/uri of the existing binary blob
 pre-uploaded to some back-end storage.
 If the new blobs are uploaded, they will be placed into the storage system (the
 one which is being used for the particular instance of Glance) and associated
-with the the artifact record by using its id.
+with the artifact record by using its id.
 If the existing location/uri is passed, only the association will be made.
 
 When the artifact repository is browsed, only the artifact metadata is
