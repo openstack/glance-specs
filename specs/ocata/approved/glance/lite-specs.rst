@@ -73,5 +73,29 @@ Return 409 if removing/replacing the location of an image that's not ``active``
 Return 409 if removing/replacing the location of an image that's not ``active``
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Expand hypervisor_type metadata with Virtuozzo hypervisor
+---------------------------------------------------------
+
+:problem: Currently it is not possible to require Virtuozzo hypervisor
+          by specifying hypervisor_type metadata, though Nova has had
+          Virtuozzo support since the Kilo release.
+
+:solution: We need to expand etc/metadefs/compute-hypervisor.json
+           hypervisor_type property with the appropriate identifier, 'vz',
+           as defined in
+           http://git.openstack.org/cgit/openstack/nova/tree/nova/compute/hv_type.py.
+
+:impacts: This will have documentation impact. Release note should
+          be added to notify interested parties about this addition.
+
+:timeline: Expected to be merged within the O-2 time frame.
+
+:link: https://review.openstack.org/#/c/341623/
+
+:assignee: Maxim Netratov
+
+End of Expand hypervisor_type metadata with Virtuozzo hypervisor
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
