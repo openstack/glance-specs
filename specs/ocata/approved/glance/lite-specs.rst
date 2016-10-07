@@ -97,5 +97,26 @@ Expand hypervisor_type metadata with Virtuozzo hypervisor
 End of Expand hypervisor_type metadata with Virtuozzo hypervisor
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Add `ploop` to the list of supported disk formats
+-------------------------------------------------
+
+:problem: Currently 'ploop' format is not among supported by default disk
+          formats, even though it's been supported by Nova since the Kilo release.
+
+:solution: `disk_formats` configuration option needs to be updated to add
+           'ploop' as one of the supported format.
+
+:impacts: This will have documentation impact. Release note should
+          be added to notify interested parties about this addition.
+
+:timeline: Expected to be merged within the O-2 time frame.
+
+:link: https://review.openstack.org/#/c/341633/
+
+:assignee: Maxim Netratov
+
+End of Add `ploop` to list of supported disk formats
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
