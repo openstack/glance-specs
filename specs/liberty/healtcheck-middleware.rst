@@ -80,7 +80,7 @@ and the middleware is lightweight filter at the start of the pipeline.
 Other deployer impact
 ---------------------
 
-healthcheck would be added to the the start of the used pipeline to be used.
+healthcheck would be added to the start of the used pipeline to be used.
 Optional disable_path=PATH option would be needed to the config files to
 enable the discreet disable functionality.
 
