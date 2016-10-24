@@ -155,7 +155,7 @@ Testing
 =======
 
 1. Tests to confirm our parsing is valid
-2. Tests to confirm the metadata has been uploaded correctly in Openstack
+2. Tests to confirm the metadata has been uploaded correctly in OpenStack
 
 Documentation Impact
 ====================

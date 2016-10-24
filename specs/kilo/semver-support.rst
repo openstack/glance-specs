@@ -52,7 +52,7 @@ properly process the version objects in memory. There is a number of mature
 libraries which have this functionality and there is no need to re-implement
 them.
 After some research it has been suggested to use "semantic_version" library
-which is available at pypi [2]. This library is not present in openstack global
+which is available at pypi [2]. This library is not present in OpenStack global
 requirements, so a patchset [3] has been submitted to add it there.
 
 To be able to sort these version objects in the database it is required to
@@ -155,12 +155,12 @@ standard seems preferable.
 
 There is one more standard which stands between semver and pep440. It is
 called "Linux Compatible Semantic Versioning 3.0.0", is a fork of regular
-semver (its 2.0 version) and is developed within Openstack community [5]. It
+semver (its 2.0 version) and is developed within OpenStack community [5]. It
 tries to blend regular semver with versions of Linux Distribution packages and
 uses some concepts of pep440 for it.
 
 This notation is easier to map to the database type, however it is still local
-to relatively small community of developers (Openstack developers in this
+to relatively small community of developers (OpenStack developers in this
 case), so more generic and widely adopted standard as semver seems more
 preferrable.
 
@@ -245,7 +245,7 @@ However it seems preferable to add this support to semantic_version library [2]
 and remove it from glance codebase aftwerwards.
 If the maintainer of the library does not accept this functionality (or if we
 decide to add support for more versioning notations later) then this code may
-be transferred to some common openstack library, such as Oslo.
+be transferred to some common OpenStack library, such as Oslo.
 
 After this feature is implemented we should continue the work to add support
 for other versioning schemas, such as pep440, Linux Compatible Semantic
