@@ -163,7 +163,7 @@ First, background, so you can see what problems needed to be addressed:
 
 #. The "Tasks" API is a disaster from the interoperability and discoverability
    standpoint.  (We know this because at least one large public cloud has
-   exposed image import via Glance Tasks, and the openstack infra team has a
+   exposed image import via Glance Tasks, and the OpenStack infra team has a
    lot to say about how bad it is.  Just ask them.)
 
    #. interoperability failures: The Task object, as defined by
@@ -174,7 +174,7 @@ First, background, so you can see what problems needed to be addressed:
    #. discoverability failures: You don't have to support a particular
       disk/container format, but there must be a way to find out what a
       particular cloud supports (and this "way" should be the same for all
-      openstack clouds, and no, documentation doesn't count)
+      OpenStack clouds, and no, documentation doesn't count)
 
 #. There are three cases for "image upload" that Glance should support.
 

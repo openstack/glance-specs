@@ -21,7 +21,7 @@ binary objects.
 Problem description
 ===================
 
-Various Openstack services often need to catalog different objects they use to
+Various OpenStack services often need to catalog different objects they use to
 operate. Such objects may contain various data as well as metadata needed for
 identification and description.
 
@@ -638,9 +638,9 @@ Then, Swift has a different level of abstraction: it does not care about the
 data which is being stored within it, while Glance should be aware of the
 artifact types specifics.
 
-Last but not least, many production-grade Openstack deployments do not have
+Last but not least, many production-grade OpenStack deployments do not have
 Swift deployed, as they do not need it. Meanwhile, Glance is present on each
-and every Openstack cloud.
+and every OpenStack cloud.
 
 Meanwhile, Swift still may be used as an underlying storage for artifacts - in
 the same way as Glance uses it to store Images.
