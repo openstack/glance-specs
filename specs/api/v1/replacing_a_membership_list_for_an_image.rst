@@ -5,8 +5,8 @@ Replacing a Membership List for an Image
 .. include:: deprecation-note.inc
 
 The full membership list for a given image may be replaced. We issue a
-``PUT`` request to ``http://glance.example.com/images/1/members`` with a
-body of the following form:
+``PUT`` request to ``http://glance.openstack.example.org/images/1/members``
+with a body of the following form:
 
 .. code::
 

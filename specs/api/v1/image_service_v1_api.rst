@@ -41,7 +41,7 @@ A host that runs the ``bin/glance-api`` service is said to be a *Glance
 API Server*.
 
 Assume there is a Glance API server running at the URL
-``http://glance.example.com``.
+``http://glance.openstack.example.org``.
 
 Let's walk through how a user might request information from this
 server.
@@ -52,8 +52,8 @@ Requesting a List of Public VM Images
 We want to see a list of available virtual machine images that the
 Glance server knows about.
 
-We issue a ``GET`` request to ``http://glance.example.com/images/`` to
-retrieve this list of available *public* images. The data is returned as
+We issue a ``GET`` request to ``http://glance.openstack.example.org/images/``
+to retrieve this list of available *public* images. The data is returned as
 a JSON-encoded mapping in the following format:
 
 .. code::

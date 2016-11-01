@@ -16,8 +16,8 @@ Continuing the example from above, in order to get metadata about the
 first public image returned, we can issue a ``HEAD`` request to the
 Glance server for the image's URI.
 
-We issue a ``GET`` request to ``http://glance.example.com/images/1`` to
-retrieve metadata for that image as well as the image itself encoded
+We issue a ``GET`` request to ``http://glance.openstack.example.org/images/1``
+to retrieve metadata for that image as well as the image itself encoded
 into the response body.
 
 The metadata is returned as a set of HTTP headers that begin with the

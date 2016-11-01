@@ -8,7 +8,7 @@ We want to see more detailed information on available virtual machine
 images that the Glance server knows about.
 
 We issue a ``GET`` request to
-``http://glance.example.com/images/detail`` to retrieve this list of
+``http://glance.openstack.example.org/images/detail`` to retrieve this list of
 available *public* images. The data is returned as a JSON-encoded
 mapping in the following format:
 
