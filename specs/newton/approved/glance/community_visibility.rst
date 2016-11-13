@@ -166,8 +166,17 @@ this spec.
 
 The behaviour for the initial implementation for community images shall
 respect the current paradigm in glance - where changing visiblities does not
-affect an image's internal member-list.
+affect an image's internal member-list.  To be precise, consistent with current
+behavior:
 
+* An image's member-list persists even when the visibility of an image has
+  changed to a value that renders the member-list inert.
+* Image member operations (that is, creating image members or changing
+  the member_status of image members) are allowed only when an image has a
+  visibility under which the member-list is *not* inert.  The justification
+  for this is that it is confusing to users to be able to perform member
+  operations on an image when these operations have no effect on the
+  accessibility of the image.
 
 Alternatives
 ------------
@@ -212,7 +221,8 @@ The visibility of the image will be stored in the database within the images
 table inside a new column named ``visibility``. The visibility will be in the
 set of ``['public', 'private', 'shared', 'community']``.
 
-The default value for ``visibility`` is ``'private'``.
+The default value for ``visibility`` is ``shared``.  (See :ref:`other-impact`
+for a discussion.)
 
 This change makes the ``is_public`` column redundant. If no v1 code actually
 uses ``is_public``, the column will be removed.
@@ -222,17 +232,23 @@ Appropriate indexes will be added to facilitate quick responses.
 Database migrations
 ~~~~~~~~~~~~~~~~~~~
 
-1. All rows with ``is_public == 1``:
+(Note: this is a statement of expected outcomes, not an algorithm for
+performing the migration.)
 
-   - ``visibility = 'public'``
+1. All rows with ``is_public`` == 1:
 
-2. For all unique ``image_id`` in ``image_members`` where ``deleted != 1``:
+   - ``visibility`` = ``public``
 
-   - ``visibility = 'shared'``
+2. For all unique ``image_id`` in ``image_members`` where ``deleted`` != 1 and
+   for which ``is_public`` == 0 for that image:
 
-3. For all other rows:
+   - ``visibility`` = ``shared``
 
-   - ``visibility = 'private'``
+3. For all other images:
+
+   - ``visibility`` = ``private``
+
+   (See :ref:`other-impact` for further discussion.)
 
 REST API impact
 ---------------
@@ -312,27 +328,159 @@ An additional attribute of ``visibility`` will be added for each image to
 indicate its visiblity, with possible values of ``['public', 'private',
 'shared', 'community']``.
 
+.. _other-impact:
 
 Other end user impact
 ---------------------
 
-In order to maintain consistency with how visibility is set, the current v2
-image-sharing workflow will be impacted.
+Consistent with current functionality, when a visibility is specified at the
+time of image creation, that visibility will be respected.  If the user
+creating the image does not have appropriate permissions to set the specified
+visibility value on an image, the image-create call will fail as it does now.
 
-Currently sharing an image is simply a matter of putting a member on it. Since
-this change adds an explicit ``shared`` value for visiblity, the new workflow
-for image-sharing would then first require the owner or an admin to set it to
-``shared`` with an image-update call: ::
+Default visibility
+~~~~~~~~~~~~~~~~~~
 
-    PATCH /v2/images/{image_id}
+In order to preserve backward compatibility with the current workflow for
+sharing an image, the default ``visibility`` of an image will be ``shared``:
 
-Request body: ::
+* An image with shared visibility and no image members is not accessible to
+  anyone other than the image owner, so this respects the current behavior.
+* Currently, when an image is created with default visibility, the owner can
+  immediately add members to the image to share it.  By making the default
+  visibility value ``shared``, we preserve this behavior.  If the default
+  visibility were ``private``, then this behavior would be broken as the
+  image owner would have to make an API call to change the visibility of
+  the image to ``shared`` before members could be added.
+* Although the Image API v1 is deprecated in Newton, it still exists and
+  will likely be deployed in clouds using the Ocata release of OpenStack.
+  Since the v1 API has no concept of visibility, there's no way for a user
+  to change the visibility to ``shared`` so that an image can have members
+  added to it.  By making the default visibility ``shared``, we achieve the
+  following desirable results:
 
-    [{ "op": "replace", "path": "/visibility", "value": "shared" }]
+  * A v1 user can create an image and add members using the current workflow,
+    that is, sharing an image is simply a matter of putting a member on it.
+  * In deployments using both v1 and v2 of the Image API, if an image is
+    created using v1 and then an image-show call is made in v2, the visibility
+    of ``shared`` makes it clear to the v2 user that the image is in a state
+    where it can both accept members and be accessed by any existing members.
 
-This impact has been discussed with the API Workgroup, and they are okay with it.
-(For reference, please see 16:26:47 on
-eavesdrop.openstack.org/meetings/api_wg/2016/api_wg.2016-06-09-15.59.log.html)
+If the default visibility value were *not* ``shared``, then v1 would need to be
+modified so that ``private`` images could accept members and be accessed by
+members.  This, however, would create a situation where an image would behave
+radically differently depending upon whether you tried to access it by the v1
+or the v2 API.  We don't want to do that.
+
+A key question here is whether changing the default visibility from ``private``
+to ``shared`` introduces a backward incompatibility into the v2 API.  Here are
+three arguments that it does not:
+
+1. The current situation is that the ``visibility`` of an image created by a
+   non-admin user has ``visibility`` != ``public``.  That situation is
+   preserved.
+
+2. If we *don't* make the default visibility ``shared``, then we are in fact
+   introducing a backward incompatibility in that any current user scripts that
+   create an image and then immediately add members to it will break.  (This
+   was in fact a problem with an earlier version of this spec.  While the API
+   working group agreed that it was a "minor" backward incompatibility that
+   would be permissible, they pointed out that Glance users were likely to be
+   annoyed by the workflow change.  The change in ``visibility`` value is a
+   lesser of two evils.)
+
+3. What we want to be the case is that when a user creates an image without
+   specifying a visibility, the image behaves the same way it does now.  Images
+   that behave in that way have the visibility that we now call ``shared``.
+   This is to be expected; previously, we had insufficient keywords to identify
+   the various accessibility statuses of images; now we do, and we should
+   use these keywords appropriately.
+
+The conclusion is that setting the default visibility to ``private`` would
+have a greater end user impact than the proposal to make the default visibility
+value ``shared``.
+
+Note that if the v2 API is used to set the visibility of an image to
+``private``, if the v1 API is used to share the image, the request will fail
+with a 409 (as it will if a member-related call is made to the v2 API).  This
+is appropriate, as someone has explicitly disabled sharing for that image.
+
+One final point implicit in the foregoing is worth stating explicitly.  If the
+v1 API is used to update the ``is_public`` property of an image, it will have
+the following effect upon the image's visibility:
+
+* If the call updates ``is_public`` to ``True``, then the corresponding v2
+  ``visibility`` of the image will be ``public``.
+
+* If the call sets ``is_public`` to ``False``, then the corresponding v2
+  ``visibility`` of the image will be set to the default value, that is,
+  ``shared``.
+
+This will preserve backward-compatible behavior in the v1 API.  The arguments
+advanced previously in favor of ``shared`` being the default visibility apply
+to this case as well.
+
+Migration of the visibility of existing images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The issue of how the database migration should work was sufficiently
+controversial that an operators' survey was taken to gather data [SUR1]_.  The
+results of the survey were reported in [SUR2]_ (along with a recommendation for
+the migration path that, as you'll see if you read on, was ultimately
+rejected).  Briefly, operators were evenly split on whether images with
+visibility ``private`` should all be migrated to ``shared`` or whether only
+those images with members should be migrated to ``shared``.
+
+We've had a lot of discussion on this (see the comments on [GER1]_ for a
+sample).  In the end, the compromise we reached is reflected in this spec.  The
+primary justification for this migration path is that it's worth trading some
+minor incompatibilities between pre-Ocata and Ocata image sharing in order to
+avoid end user confusion when they first use Glance after a deployment has been
+upgraded to Ocata and suddenly see that all the images they own now have a
+visibility of 'shared'.
+
+Thus, the end user impact of an upgrade to the Glance Ocata release will be the
+following:
+
+* Any existing "private" image with a non-empty member-list will be found
+  to have visibility 'shared'.
+
+* Any existing "private" image that has no image members will be found to
+  have visibility 'private'.
+
+  * Incompatibility: v2: Unlike pre-Ocata, the visibility of the image must be
+    changed to 'shared' before the member-create call will succeed.  v1: Users
+    must explicitly set ``is_public`` to ``False`` before the member-create
+    call will succeed.
+
+* Any images created after the upgrade for which a visibility is not specified
+  at the time of image creation will have visibility 'shared'.
+
+  * Inconsistency: The member-create call will immediately work for newly
+    created images with default visibility, whereas migrated images will have
+    to be dealt with as described above.
+
+* Pre-Ocata, an end user had "private" images that might actually be shared.
+  The user had to do an API call to see the member-list to determine whether
+  other users could access that image.  In Ocata, an end user will have images
+  with visibility ``shared`` that may not actually be accessible to other
+  users.  The user must do an API call to see whether the image has a non-empty
+  member list.
+
+  * Incompatibility: The workflow required to determine whether an image is
+    accessible to other users is roughly the same, but it now depends upon
+    *two* aspects: (1) the visibility must be 'shared', and (2) the image's
+    member-list must be non-empty.
+
+    The upside to this incompatibility is that in the Glance Ocata release, a
+    ``visibility`` value of ``private`` will actually mean "private" instead
+    of "private or shared".
+
+.. [SUR1] http://lists.openstack.org/pipermail/openstack-operators/2016-November/012107.html
+
+.. [SUR2] http://lists.openstack.org/pipermail/openstack-operators/2016-December/012235.html
+
+.. [GER1] https://review.openstack.org/#/c/396919/
 
 
 Client changes
