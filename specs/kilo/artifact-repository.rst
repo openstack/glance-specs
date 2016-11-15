@@ -537,7 +537,7 @@ its lifecycle:
 
   Artifacts in ACTIVE state are visible to other tenants if the 'Visibility'
   field is set to PUBLIC.
-  When the artifact is in this state is is assumed that it may be used by
+  When the artifact is in this state it is assumed that it may be used by
   the third-party services.
   When the artifact is in ACTIVE state its owner may initiate its deletion.
   This will change the state of the artifact to ‘DELETED’.
