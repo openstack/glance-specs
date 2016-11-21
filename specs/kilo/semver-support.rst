@@ -162,7 +162,7 @@ uses some concepts of pep440 for it.
 This notation is easier to map to the database type, however it is still local
 to relatively small community of developers (OpenStack developers in this
 case), so more generic and widely adopted standard as semver seems more
-preferrable.
+preferable.
 
 However we are not limited to having only a single versioning notation. In
 future we may add support for extra schemas, including some subset of pep440 or
