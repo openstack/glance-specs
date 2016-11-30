@@ -398,7 +398,7 @@ returned: the data objects for each specific artifact have to be downloaded
 separately, by sending an appropriate API calls either to Glance or directly to
 the appropriate underlying storage system.
 
-Unlike the current Glance Images, a single artifact may have more then one
+Unlike the current Glance Images, a single artifact may have more than one
 binary object associated.
 
   *For example, a Heat template, being stored as an artifact, may require a
