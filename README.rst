@@ -4,6 +4,14 @@ Team and repository tags
 
 .. image:: http://governance.openstack.org/badges/glance-specs.svg
     :target: http://governance.openstack.org/reference/tags/index.html
+    :alt: The following tags have been asserted for the Glance Specifications
+          repository:
+          "project:official",
+          "team:diverse-affiliation".
+          Follow the link for an explanation of these tags.
+.. NOTE(rosmaita): the alt text above will have to be updated when
+   additional tags are asserted for glance-specs.  (The SVG in the
+   governance repo is updated automatically.)
 
 .. Change things from this point on
 
