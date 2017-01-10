@@ -32,6 +32,7 @@ Glance specs:
    specs/mitaka/*
    specs/newton/*
    specs/ocata/*
+   specs/pike/*
 
 Client specs:
 
