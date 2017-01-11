@@ -153,5 +153,25 @@ Use ``Range`` HTTP header instead of ``Content-Range`` for parsing requests
 Use ``Range`` HTTP header instead of ``Content-Range`` for parsing requests
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Rplace mox with mock for unit test
+----------------------------------
+
+:problem: ``Mox`` does not support python 3. We have a shim module 'mox3' that was
+          built a couple of years ago, is unmaintained, and as it gets tested
+          more heavily is showing race conditions under python3.
+
+:solution: Replace ``mox`` with ``mock``.
+
+:impacts: This change will use ``mock`` instead of ``mox``.
+
+:timeline: Expected to be merged within the Ocata time frame.
+
+:link: https://review.openstack.org/#/c/407959/
+
+:assignee: Howard Lee
+
+Rplace mox with mock for unit test
+++++++++++++++++++++++++++++++++++
+
 Add your Spec Lite before this line
 ===================================
