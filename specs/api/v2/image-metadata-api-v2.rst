@@ -39,6 +39,8 @@ the created ``image`` entity. For example:
         "schema": "/v2/schemas/image"
     }
 
+.. _image-update:
+
 Update an image
 ---------------
 
