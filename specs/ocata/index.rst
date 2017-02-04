@@ -12,7 +12,7 @@ Ocata implemented specs:
    :glob:
    :maxdepth: 1
 
-..   implemented/*
+   implemented/*
 
 Ocata approved (but not implemented) specs:
 
