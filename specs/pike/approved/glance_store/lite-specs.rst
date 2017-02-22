@@ -34,6 +34,21 @@ Optionals (please remove this line and fill or remove the rest until End of Temp
 End of Template
 +++++++++++++++
 
+Community Goal: Support Python 3.5
+----------------------------------
+
+:problem: Satisfy the Pike community goal `Support Python 3.5
+          <https://governance.openstack.org/tc/goals/pike/python35.html>`_
+
+:solution: Ensure that glance_store meets the criteria of the Goal.
+
+:impacts: None.
+
+:assignee: Alex Bashmakov
+
+End of `Community Goal: Support Python 3.5`
++++++++++++++++++++++++++++++++++++++++++++
+
 
 Add your Spec Lite before this line
 ===================================
