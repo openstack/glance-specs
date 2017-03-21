@@ -91,7 +91,18 @@ Questions which need to be addressed by this section include:
 * What new data objects and/or database schema changes is this going to
   require?
 
-* What database migrations will accompany this change?
+* Glance is committed to zero-downtime database migrations and has adopted an
+  `E-M-C migration strategy <https://docs.openstack.org/developer/glance/database_migrations.html>`_
+  to achieve this.  Address the following in sufficient detail to make it clear
+  that the intended database change will be achieved.
+
+  - Will this change require database triggers?  If yes, describe them.
+  - Explain what your expand migrations will look like.
+  - Explain what your data migrations will look like.
+  - Explain what your contract migrations will look like.
+  - Finally, do these changes have the potential to interfere with the
+    database migrations for other specs that have been approved for this
+    cycle?
 
 * How will the initial set of new data objects be generated? For example if you
   need to take into account existing images, or modify other existing data,
