@@ -1,8 +1,8 @@
 .. glance-specs documentation master file
 
-=====================================
+============================
 Image Service (Glance) Plans
-=====================================
+============================
 
 Priorities
 ==========
@@ -33,6 +33,7 @@ Glance specs:
    specs/newton/*
    specs/ocata/*
    specs/pike/*
+   specs/queens/*
 
 Client specs:
 
