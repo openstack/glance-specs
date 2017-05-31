@@ -4,6 +4,22 @@
 Image Service (Glance) Plans
 ============================
 
+The Glance Project Team has the responsibility for maintaining the
+following projects:
+
+* Glance: https://git.openstack.org/cgit/openstack/glance
+* The glance_store library: https://git.openstack.org/cgit/openstack/glance_store
+* The Glance client: https://git.openstack.org/cgit/openstack/python-glanceclient
+
+This repository contains proposals for new features, or proposals for
+changes to the current projects that are sufficiently complicated or
+controversial that in-depth discussion is required.
+
+Please see the `Glance Contribution Guidelines`_ for information about how to
+make a proposal to this repository.
+
+.. _Glance Contribution Guidelines: https://docs.openstack.org/developer/glance/contributing/blueprints.html
+
 Priorities
 ==========
 
@@ -20,12 +36,11 @@ discussions:
 Specifications
 ==============
 
-Glance specs:
-
 .. toctree::
    :glob:
    :maxdepth: 1
 
+   specs/untargeted/*
    specs/juno/index
    specs/kilo/index
    specs/liberty/index
@@ -34,16 +49,6 @@ Glance specs:
    specs/ocata/*
    specs/pike/*
    specs/queens/*
-
-Client specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/glanceclient/*
-
-
 
 ====================
 Image service V2 API
