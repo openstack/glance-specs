@@ -18,13 +18,13 @@ on implementing one of these specs.
    :glob:
    :maxdepth: 1
 
-.. Approved untargeted specs for Glance:
+Approved untargeted specs for Glance:
 
-.. .. toctree::
-..    :glob:
-..    :maxdepth: 1
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-..    glance/*
+   glance/*
 
 .. Approved untargeted specs for glance_store:
 
