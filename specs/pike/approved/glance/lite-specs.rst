@@ -49,22 +49,5 @@ Community Goal: Support Python 3.5
 End of `Community Goal: Support Python 3.5`
 +++++++++++++++++++++++++++++++++++++++++++
 
-Community Goal: Control Plane API endpoints deployment via WSGI
----------------------------------------------------------------
-
-:problem: Implement the Pike community goal `Control Plane API endpoints deployment
-          via WSGI <https://governance.openstack.org/tc/goals/pike/deploy-api-in-wsgi.html>`_.
-
-:solution: Implement a devstack plugin to run the Images API v2 supplied by Glance
-           in mod_wsgi.
-
-:impacts: None.
-
-:assignee: Matt Treinish
-
-End of `Community Goal: Control Plane API endpoints deployment via WSGI`
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 Add your Spec Lite before this line
 ===================================
