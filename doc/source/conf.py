@@ -76,6 +76,7 @@ copyright = u'%s, OpenStack Glance Team' % datetime.date.today().year
 exclude_patterns = [
     '_build',
     '**/template.rst',
+    '**/spec-lite-template.rst',
 ]
 
 # The reST default role (used for this markup: `text`) to use for all documents.
