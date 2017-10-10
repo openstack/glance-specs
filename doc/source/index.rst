@@ -15,17 +15,29 @@ This repository contains proposals for new features, or proposals for
 changes to the current projects that are sufficiently complicated or
 controversial that in-depth discussion is required.
 
-Please see the `Glance Contribution Guidelines`_ for information about how to
-make a proposal to this repository.
+The Glance Project Team uses two types of design document:
+
+**Spec**
+  A *spec* is an in-depth description of the proposed feature.  It's required
+  for any proposal that affects an API supplied by Glance, for any proposal
+  that changes the data model, for any proposal that would require a database
+  migration, or any change that requires a thorough exploration of alternative
+  ways to accomplish the feature.
+
+**Spec Lite**
+  A *spec lite* is a brief proposal for a small enhancement to Glance.
+
+Please see the `Glance Contribution Guidelines`_ for further information about
+how to make a proposal to this repository.
 
 .. _Glance Contribution Guidelines: https://docs.openstack.org/developer/glance/contributing/blueprints.html
 
 Priorities
 ==========
 
-During each design summit, we agree on what the whole community wants
-to focus on for the upcoming release. This is the output of those
-discussions:
+During each Project Team Gathering (or "design summit"), we agree on what the
+whole community wants to focus on for the upcoming release. This is the output
+of those discussions:
 
 .. toctree::
    :glob:
@@ -36,19 +48,40 @@ discussions:
 Specifications
 ==============
 
+Current
+-------
+
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/untargeted/*
-   specs/juno/index
-   specs/kilo/index
-   specs/liberty/index
-   specs/mitaka/*
-   specs/newton/*
-   specs/ocata/*
-   specs/pike/*
    specs/queens/*
+   specs/untargeted/*
+
+Future
+------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+   
+   specs/rocky/*
+
+
+Past
+----
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+   
+   specs/pike/*
+   specs/ocata/*
+   specs/newton/*
+   specs/mitaka/*
+   specs/liberty/index
+   specs/kilo/index
+   specs/juno/index
 
 ====================
 Image service V2 API
