@@ -43,7 +43,8 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
-   priorities/*
+   priorities/queens-priorities
+   previous-priorities
 
 Specifications
 ==============
