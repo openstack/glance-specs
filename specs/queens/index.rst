@@ -12,9 +12,9 @@ Queens implemented specs:
    :glob:
    :maxdepth: 1
 
-..   implemented/*
+   implemented/*
 
-Queens approved (but not implemented) specs:
+Queens approved specs:
 
 .. toctree::
    :glob:

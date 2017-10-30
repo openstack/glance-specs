@@ -1,3 +1,4 @@
 # This file contains tests for redirects to handle existing URLs for
 # specs that have been moved. See
 # https://docs.openstack.org/whereto/latest/ for details.
+/specs/queens/approved/glance/deprecate-registry.html 301 /specs/queens/implemented/glance/deprecate-registry.html
