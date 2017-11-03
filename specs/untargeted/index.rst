@@ -26,13 +26,13 @@ Approved untargeted specs for Glance:
 
    glance/*
 
-.. Approved untargeted specs for glance_store:
+Approved untargeted specs for glance_store:
 
-.. .. toctree::
-..    :glob:
-..    :maxdepth: 1
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-..    glance_store/*
+   glance_store/*
 
 .. Approved untargeted specs for python-glanceclient:
 
