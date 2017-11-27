@@ -16,6 +16,8 @@ import subprocess
 import sys
 import os
 
+import openstackdocstheme
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -35,9 +37,14 @@ extensions = ['sphinx.ext.autodoc',
               'sphinxcontrib.actdiag',
               'sphinxcontrib.seqdiag',
               'sphinxcontrib.nwdiag',
-              'oslosphinx',
+              'openstackdocstheme',
               'yasfb',
              ]
+
+# config for openstackdocstheme
+repository_name = 'openstack/glance-specs'
+bug_project = 'glance'
+bug_tag = 'glance-specs'
 
 # Feed configuration for yasfb
 feed_base_url = 'http://specs.openstack.org/openstack/glance-specs'
@@ -106,7 +113,7 @@ man_pages = []
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'nature'
+html_theme = 'openstackdocs'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -114,7 +121,7 @@ html_theme = 'nature'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+#html_theme_path = [openstackdocstheme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -149,6 +156,10 @@ html_last_updated_fmt = subprocess.check_output(git_cmd).decode('utf-8')
 # template names.
 #html_additional_pages = {}
 
+# Add any paths that contain "extra" files, such as .htaccess or
+# robots.txt.
+html_extra_path = ['_extra']
+
 # If false, no module index is generated.
 html_domain_indices = False
 
@@ -178,6 +189,7 @@ html_use_index = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Glance-Specsdoc'
 
+html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # -- Options for LaTeX output --------------------------------------------------
 

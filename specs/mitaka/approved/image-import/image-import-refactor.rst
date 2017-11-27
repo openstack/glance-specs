@@ -1216,14 +1216,11 @@ Everything you always wanted to know about Glance Image Import but were afraid t
 References
 ==========
 
-.. [OSB1] https://blueprints.launchpad.net/glance/+spec/upload-download-workflow
 .. [OSD1] http://developer.openstack.org/api-ref-image-v2.html#os-tasks-v2
 .. [OSE1] https://etherpad.openstack.org/p/havana-getting-glance-ready-for-public-clouds
 .. [OSE2] https://etherpad.openstack.org/p/glance-upload-mechanism-reloaded
 .. [OSE3] https://etherpad.openstack.org/p/Mitaka-glance-image-import-reloaded
 .. [OSE4] https://etherpad.openstack.org/p/glance-image-import-example
-.. [OSG1] https://review.openstack.org/#/c/220166/
-.. [OSG2] https://review.openstack.org/#/c/220166/4/doc/source/tasks.rst
 .. [OSL1] http://eavesdrop.openstack.org/irclogs/%23openstack-glance/%23openstack-glance.2015-09-22.log.html#t2015-09-22T14:31:00
 .. [OSM1] http://lists.openstack.org/pipermail/openstack-dev/2015-September/thread.html#74360
 .. [OSM2] http://lists.openstack.org/pipermail/openstack-dev/2015-September/thread.html#74383
@@ -1232,6 +1229,16 @@ References
 .. [OSW1] https://wiki.openstack.org/wiki/Glance-tasks-api
 .. [OSW2] https://wiki.openstack.org/wiki/Glance-tasks-api-product
 .. [OSW3] https://wiki.openstack.org/wiki/Glance-tasks-import
-.. [OSW4] https://wiki.openstack.org/wiki/Glance-upload-mechanism-reloaded
 .. [NEW1] https://governance.openstack.org/resolutions/20151211-bring-your-own-kernel.html
 .. [NEW2] https://github.com/openstack/defcore/commit/10562c245a6332f52cb5c5d15739dfab15b2baa6
+
+Other Relevant Supporting Information
+=====================================
+
+[OSB1] https://blueprints.launchpad.net/glance/+spec/upload-download-workflow
+
+[OSG1] https://review.openstack.org/#/c/220166/
+
+[OSG2] https://review.openstack.org/#/c/220166/4/doc/source/tasks.rst
+
+[OSW4] https://wiki.openstack.org/wiki/Glance-upload-mechanism-reloaded

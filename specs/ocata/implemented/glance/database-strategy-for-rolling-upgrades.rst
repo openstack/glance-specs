@@ -801,7 +801,6 @@ References
 
 .. [GVV1] https://governance.openstack.org/reference/tags/assert_supports-rolling-upgrade.html
 .. [GVV2] https://governance.openstack.org/reference/tags/assert_supports-zero-downtime-upgrade.html
-.. [GVV3] https://governance.openstack.org/reference/tags/assert_supports-zero-impact-upgrade.html
 .. [NOV1] http://www.danplanet.com/blog/2015/10/07/upgrades-in-nova-database-migrations/
 .. [CIN1] https://specs.openstack.org/openstack/cinder-specs/specs/mitaka/online-schema-upgrades.html
 .. [KEY1] https://specs.openstack.org/openstack/keystone-specs/specs/mitaka/online-schema-migration.html

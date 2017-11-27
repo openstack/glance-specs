@@ -108,7 +108,7 @@ whether the image was already cached when the request was
 received.  While the exact mechanism for achieving this might
 vary, one example of how this can be achieved follows:
 
-.. code-block:: python
+.. code-block:: none
 
     if the cache file does not exist:
         create it

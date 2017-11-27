@@ -36,13 +36,13 @@ another set of API nodes that need to be deployed, monitored, and upgraded. From
 a documentation stand point, the team needs to make sure the service docs are
 up-to-date, the best practices are spelled out and configuration files updated.
 
-The benefits of this service have been discussed in a recent thread[0]_ on both,
+The benefits of this service have been discussed in a recent thread [0]_ on both
 developers and operators, mailing lists. The output of this thread is not really
 conclusive, although it suggests there's no real use case for this service
 anymore and that OPs would be better off by not having it.
 
 Rolling upgrades was brought as a possible blocker for this deprecation. As it's
-been explained in the thread[1], upgrading Glance (or even the planned work on
+been explained in the thread [1]_, upgrading Glance (or even the planned work on
 rolling upgrades) should not depend on the presence of this service. Anything
 needed from Glance Registry should be possible to obtain from Glance API itself.
 
