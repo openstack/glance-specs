@@ -16,11 +16,10 @@ Queens approved specs for Glance:
 
 Queens approved specs for glance_store:
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   glance_store/*
+   There are no specs approved for glance_store for Queens.
+   Please consult the :doc:`../../untargeted/index` if
+   you'd like to work on glance_store during the Queens
+   development cycle.
 
 Queens approved specs for python-glanceclient:
 
