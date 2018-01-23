@@ -975,7 +975,7 @@ JSON schema v4 syntax.  But are limited to the following types:
 
 Each primitive type is described using simple JSON schema notation. This
 means NO nested objects and no definition referencing.
-.. note:: See Schema Definitions below for property defintion.
+.. note:: See Schema Definitions below for property definition.
 
 JSON Schema for Objects::
 

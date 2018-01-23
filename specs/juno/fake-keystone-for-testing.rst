@@ -81,7 +81,7 @@ None
 Performance Impact
 ------------------
 
-There is impact on test perfomance as more processes are needed to run the
+There is impact on test performance as more processes are needed to run the
 tests.
 
 This can be circumvented by more coarse functional testing as agreed on weekly
