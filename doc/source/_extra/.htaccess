@@ -1,3 +1,5 @@
 # This file contains redirects to handle existing URLs for specs that
 # have been moved
 Redirect 301 /specs/queens/approved/glance/deprecate-registry.html /specs/queens/implemented/glance/deprecate-registry.html
+Redirect 301 /specs/queens/approved/glance/inject-automatic-metadata.html /specs/queens/implemented/glance/inject-automatic-metadata.html
+Redirect 301 /specs/queens/approved/glance/lite-spec-scrubber-refactor.html /specs/queens/implemented/glance/lite-spec-scrubber-refactor.html
