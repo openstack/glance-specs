@@ -1,6 +1,6 @@
-=================================
-Utargeted Approved Specifications
-=================================
+==================================
+Untargeted Approved Specifications
+==================================
 
 The following specs have been reviewed and approved but have
 not been targeted for a release because the proposer is no longer
@@ -34,10 +34,10 @@ Approved untargeted specs for glance_store:
 
    glance_store/*
 
-.. Approved untargeted specs for python-glanceclient:
+Approved untargeted specs for python-glanceclient:
 
-.. .. toctree::
-..    :glob:
-..    :maxdepth: 1
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-..    python-glanceclient/*
+   python-glanceclient/*

@@ -21,4 +21,3 @@ Mitaka approved (but not implemented) specs:
    :maxdepth: 1
 
    approved/*
-   approved/image-import/*

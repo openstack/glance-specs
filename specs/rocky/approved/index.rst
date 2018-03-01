@@ -12,8 +12,8 @@ Rocky approved specs for Glance:
    :glob:
    :maxdepth: 1
 
-..   glance/*
-..   glance/image-import/*
+   glance/*
+   glance/image-import/*
 
 Rocky approved specs for glance_store:
 

@@ -43,7 +43,7 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
-   priorities/queens-priorities
+   priorities/rocky-priorities
    previous-priorities
 
 Specifications
@@ -56,18 +56,15 @@ Current
    :glob:
    :maxdepth: 1
 
-   specs/queens/*
+   specs/rocky/*
    specs/untargeted/*
 
-Future
-------
+.. Future
+.. ------
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
-   
-   specs/rocky/*
-
+.. .. toctree::
+..   :glob:
+..   :maxdepth: 1
 
 Past
 ----
@@ -76,6 +73,7 @@ Past
    :glob:
    :maxdepth: 1
    
+   specs/queens/*
    specs/pike/*
    specs/ocata/*
    specs/newton/*
@@ -84,9 +82,12 @@ Past
    specs/kilo/index
    specs/juno/index
 
-====================
-Image service V2 API
-====================
+
+Image Service API Guide
+=======================
+
+Image Service API v2
+--------------------
 
 .. toctree::
     :maxdepth: 1
@@ -100,9 +101,8 @@ Image service V2 API
     specs/api/v2/sharing-image-api-v2.rst
     specs/api/v2/http-patch-image-api-v2.rst
 
-====================
-Image service V1 API
-====================
+Image Service API v1
+--------------------
 
 .. include:: specs/api/v1/deprecation-note.inc
 

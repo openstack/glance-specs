@@ -5,3 +5,8 @@
 /specs/queens/approved/glance/inject-automatic-metadata.html 301 /specs/queens/implemented/glance/inject-automatic-metadata.html
 /specs/queens/approved/glance/lite-spec-scrubber-refactor.html 301 /specs/queens/implemented/glance/lite-spec-scrubber-refactor.html
 /specs/queens/approved/python-glanceclient/deprecate-v1-support.rst 301 /specs/rocky/approved/python-glanceclient/deprecate-v1-support.rst
+/specs/queens/approved/glance/multihash.html 301 specs/rocky/approved/glance/multihash.html
+/specs/queens/approved/glance/remove-registry-v1.html 301 /specs/rocky/approved/glance/remove-registry-v1.html
+/specs/queens/approved/glance/remove-v1.html 301 /specs/rocky/approved/glance/remove-v1.html
+/specs/mitaka/approved/image-import/image-import-refactor.html 301 /specs/rocky/approved/glance/image-import/image-import-refactor.html
+/specs/queens/approved/python-glanceclient/no-schema-validation.html 301 /specs/untargeted/python-glanceclient/no-schema-validation.html
