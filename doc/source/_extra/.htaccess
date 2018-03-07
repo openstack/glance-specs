@@ -4,7 +4,7 @@ Redirect 301 /specs/queens/approved/glance/deprecate-registry.html /specs/queens
 Redirect 301 /specs/queens/approved/glance/inject-automatic-metadata.html /specs/queens/implemented/glance/inject-automatic-metadata.html
 Redirect 301 /specs/queens/approved/glance/lite-spec-scrubber-refactor.html /specs/queens/implemented/glance/lite-spec-scrubber-refactor.html
 Redirect 301 /specs/queens/approved/python-glanceclient/deprecate-v1-support.rst /specs/rocky/approved/python-glanceclient/deprecate-v1-support.rst
-Redirect 301 /specs/queens/approved/glance/multihash.html specs/rocky/approved/glance/multihash.html
+Redirect 301 /specs/queens/approved/glance/multihash.html /specs/rocky/approved/glance/multihash.html
 Redirect 301 /specs/queens/approved/glance/remove-registry-v1.html /specs/rocky/approved/glance/remove-registry-v1.html
 Redirect 301 /specs/queens/approved/glance/remove-v1.html /specs/rocky/approved/glance/remove-v1.html
 Redirect 301 /specs/mitaka/approved/image-import/image-import-refactor.html /specs/rocky/approved/glance/image-import/image-import-refactor.html
