@@ -33,7 +33,7 @@ Spec Lite: <Your Title Here>
 :timeline: <List the milestone by which you expect this work to be completed.>
 
 :link: <Link to the change in gerrit that already would provide the `solution`.
-       After commiting the Spec Lite depend the change to the Spec Lite commit.>
+       After committing the Spec Lite depend the change to the Spec Lite commit.>
 
 :reviewers: <If specific reviewers have agreed to champion this proposal, list
             them here.>
