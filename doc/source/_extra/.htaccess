@@ -9,3 +9,4 @@ Redirect 301 /specs/queens/approved/glance/remove-registry-v1.html /specs/rocky/
 Redirect 301 /specs/queens/approved/glance/remove-v1.html /specs/rocky/approved/glance/remove-v1.html
 Redirect 301 /specs/mitaka/approved/image-import/image-import-refactor.html /specs/rocky/approved/glance/image-import/image-import-refactor.html
 Redirect 301 /specs/queens/approved/python-glanceclient/no-schema-validation.html /specs/untargeted/python-glanceclient/no-schema-validation.html
+Redirect 301 /specs/untargeted/glance/lite-spec-db-sync-check.html /specs/queens/implemented/glance/lite-spec-db-sync-check.html

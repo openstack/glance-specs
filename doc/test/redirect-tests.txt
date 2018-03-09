@@ -10,3 +10,4 @@
 /specs/queens/approved/glance/remove-v1.html 301 /specs/rocky/approved/glance/remove-v1.html
 /specs/mitaka/approved/image-import/image-import-refactor.html 301 /specs/rocky/approved/glance/image-import/image-import-refactor.html
 /specs/queens/approved/python-glanceclient/no-schema-validation.html 301 /specs/untargeted/python-glanceclient/no-schema-validation.html
+/specs/untargeted/glance/lite-spec-db-sync-check.html 301 /specs/queens/implemented/glance/lite-spec-db-sync-check.html
