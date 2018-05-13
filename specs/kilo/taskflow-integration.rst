@@ -142,7 +142,7 @@ References
 
 * https://github.com/openstack/taskflow
 
-* https://pypi.python.org/pypi/taskflow/
+* https://pypi.org/project/taskflow/
 
 * https://review.openstack.org/#/c/85211/14 (needs to be rebased once the spec
   is approved)

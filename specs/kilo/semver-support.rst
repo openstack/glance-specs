@@ -277,6 +277,6 @@ References
 ==========
 
 [1] http://semver.org
-[2] https://pypi.python.org/pypi/semantic_version/
+[2] https://pypi.org/project/semantic_version/
 [3] https://review.openstack.org/#/c/151466/
 [4] https://www.python.org/dev/peps/pep-0440/
