@@ -17,10 +17,11 @@ Rocky approved specs for Glance:
 
 Rocky approved specs for glance_store:
 
-   There are no specs approved for glance_store for Rocky.
-   Please consult the :doc:`../../untargeted/index` if
-   you'd like to work on glance_store during the Rocky
-   development cycle.
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   glance_store/*
 
 Rocky approved specs for python-glanceclient:
 
