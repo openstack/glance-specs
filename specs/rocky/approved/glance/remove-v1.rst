@@ -15,6 +15,10 @@ Spec Lite: Remove the Images API v1
            for example, removing any Tempest tests that use the v1 API.  These
            will be noted as "Work Items" on the Blueprint.
 
+:how: Remove all v1 tests, remove v1 endpoints from Images API, remove
+      `glance-cache-manage` command that is still relying fully on v1 API.
+      Gradually clean out the v1 code base that's left behind.
+
 :impacts: DocImpact (All v1 docs will have to be removed)
 
 :timeline: target for the Q-3 milestone (week of 22 January 2017)
@@ -23,4 +27,4 @@ Spec Lite: Remove the Images API v1
 
 :reviewers: all core reviewers
 
-:assignee: rosmaita
+:assignee: jokke
