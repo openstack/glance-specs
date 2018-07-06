@@ -52,9 +52,9 @@ included in the end user's default image-list in the first place.
 Proposed change
 ===============
 
-This spec proposes adding a new boolean column ``"hidden"`` in images table.
-Images where ``"hidden" = True`` will be omitted from the image list presented
-to the user. This will apply to all image visibilities.
+This spec proposes adding a new boolean column ``"os_hidden"`` in images table.
+Images where ``"os_hidden" = True`` will be omitted from the image list
+presented to the user. This will apply to all image visibilities.
 However, the images will continue to be discoverable.
 
 .. note:: Example
@@ -63,16 +63,21 @@ However, the images will continue to be discoverable.
     ``"?visibility=public"`` on the  ``GET v2/images`` call.
     He sees a CentOS 7 image, but notices that it was created_at today,
     so he realizes that it's not the same image that he's searching for.
-    So now he uses ``"?visibility=public&hidden=true"`` to get the list of all
+    So now he uses ``"?visibility=public&os_hidden=true"`` to get the list of all
     available images.
 
-If the image has ``"hidden" = False`` the image is not omitted from the image
-list. It preserves the current behaviour.
+If the image has ``"os_hidden" = False`` the image is not omitted from the
+image list. It preserves the current behaviour.
 
-At image creation, if not specified, it's used ``"hidden" = False``.
+At image creation, if not specified, it's used ``"os_hidden" = False``.
 
-Changing the property "hidden" will be considered an image update. Because,
+Changing the property "os_hidden" will be considered an image update. Because,
 the policy is already defined for this operation no other changes are required.
+
+In the response of create/show image the new property will be displayed as
+``os_hidden``. If a pre-Rocky image already has a custom property named as
+``os_hidden`` then that property will no longer be visible in the response
+from Rocky release.
 
 All operations in the image will continue to be available considering the
 policy defined.
@@ -103,22 +108,24 @@ admins will need implement their own solution to expose these images.
 Data model impact
 -----------------
 
-Add the "hidden" boolean column in images table.
+Add the "os_hidden" boolean column in images table.
 
 For the E-M-C migration strategy is proposed:
-- Triggers: not required. Queens release will reject an image-update call
-setting 'hidden' with a 400 because it doesn't recognize the field.
-- Expand: will add a boolean "hidden" column to the images table.
+
+- Triggers: not required. A pre-Rocky glance release will reject an
+  image-update call setting 'os_hidden' with a 400 because it doesn't recognize
+  the field.
+- Expand: will add a boolean "os_hidden" column to the images table.
 - Contract: not required
-- Data Migration: set the "hidden" column to False in all rows.
+- Data Migration: Not required.
 
 
 REST API impact
 ---------------
 
-A new property "hidden" will be accepted for the GET call.
-GET v2/images ... hidden=true/false
-By default the API will consider hidden=false.
+A new property "os_hidden" will be accepted for the GET call.
+GET v2/images ... os_hidden=true/false
+By default the API will consider os_hidden=false.
 
 Security impact
 ---------------
@@ -154,13 +161,13 @@ Assignee(s)
 -----------
 
 Primary assignee:
-- Belmiro Moreira
+- Abhishek Kekane
 
 Work Items
 ----------
 
-- Add support in GET call for the property "hidden".
-  Consider the default "hidden=false".
+- Add support in GET call for the property "os_hidden".
+  Consider the default "os_hidden=false".
 - Change the image table schema adding a new field.
 - Change the glance-client to support the new property.
 
