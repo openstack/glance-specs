@@ -217,7 +217,7 @@ at any time - their value is set automatically by the repository.
      - Immutable
      - Yes
      - String following the SemVer notation
-     - Defines the version of the artifact. See “Artifact versioning” section
+     - Defines the version of the artifact. See "Artifact versioning" section
        below for the details.
    * - Description
      - Mutable
@@ -241,7 +241,7 @@ at any time - their value is set automatically by the repository.
      - N/A
      - Enum, any of: CREATING, ACTIVE, DEACTIVATED, DELETED
      - A system field set by the repository, indicating the current phase of
-       the artifact's lifecycle. See “Artifact Lifecyle” below for details
+       the artifact's lifecycle. See "Artifact Lifecyle" below for details
    * - Owner
      - System
      - N/A
@@ -291,13 +291,13 @@ the following properties:
   The following types are supported:
 
   * *String* - simple string value (255 characters max). In listing queries
-    may use this field to filter artifacts by value equality (e.g. “filter all
+    may use this field to filter artifacts by value equality (e.g. "filter all
     the artifacts of type ‘Image’ having the field ‘OS_TYPE’ equal to
-    ‘Linux’”)
+    ‘Linux’")
   * *Integer*. - integer field. In listing queries may use this field to
-    filter artifacts by both value equality and value range (e.g. “filter all
+    filter artifacts by both value equality and value range (e.g. "filter all
     the artifacts of type ‘Image’ having the field ‘REQUIRED_RAM’ less or equal
-    to 16”)
+    to 16")
   * *Numeric* - same as Integer, but stored as Numeric
   * *Boolean** - boolean values, having either 'True' or 'False' as the value.
     In listing queries may use this field to filter artifacts by value equality.
@@ -383,8 +383,8 @@ images are stored independently from their definitions in the current version
 of Glance.
 
 When the artifact is initially created in the repository (the record is
-inserted into the database), it is in the CREATING state (see the “Artifact
-Lifecycle” section below) and has no binary data associated. Then - before
+inserted into the database), it is in the CREATING state (see the "Artifact
+Lifecycle" section below) and has no binary data associated. Then - before
 publishing the artifact - its owner may upload the data by using the
 appropriate API calls or specify the location/uri of the existing binary blob
 pre-uploaded to some back-end storage.
@@ -412,8 +412,8 @@ binary object associated.
 
 This means that each artifact may have a number of different BLOBs associated.
 
-The amount of blobs and their types (“Heat template”, "Provider Templates" and
-“Icon” in the example above) are defined per each artifact type. When the
+The amount of blobs and their types ("Heat template", "Provider Templates" and
+"Icon" in the example above) are defined per each artifact type. When the
 artifact is in CREATING state its owner will have to upload all the required
 parts one-by-one, specifying their types every time. If some required blob is
 not uploaded, the "publishing check" will not pass and the artifact will not be
@@ -441,9 +441,9 @@ properties:
   If set to None, then the number of blobs in BLOBs list per
   artifact has no upper bound.
 
-  *For example, the above-mentioned artifact type “Heat template” may define
-  an optional BinaryObjectList property with the Name set to “ProviderTemplate”,
-  and a required BinaryObjectList property with the name “Icon” and minimum
+  *For example, the above-mentioned artifact type "Heat template" may define
+  an optional BinaryObjectList property with the Name set to "ProviderTemplate",
+  and a required BinaryObjectList property with the name "Icon" and minimum
   and maximum length constraints equal to 1.
   This means that the artifacts of this type have to contain exactly one icon
   blob and zero or more provider template blobs.*
@@ -452,7 +452,7 @@ The repository provides an API call to inspect the blob contents of each
 artifact.
 
   *In the example above the API returns a dictionary containing two
-  keys: “ProviderTemplates” and “Icon”. The first key defined a list of
+  keys: "ProviderTemplates" and "Icon". The first key defined a list of
   records, each one corresponding to a different blob with a provider template,
   the second one defines a single record corresponding to the blob with the
   icon. Each of the blob records contains an id of the particular blob, which
@@ -499,8 +499,8 @@ editing.
 
 The dependencies cannot be circular (e.g if A depends on B, B depends on C and
 C depends on D, then D cannot depend on A), and the published artifact may not
-depend on an artifact being in a “CREATING” state. For example, if A depends
-on B and both are in “CREATING” state, then B should be published before A,
+depend on an artifact being in a "CREATING" state. For example, if A depends
+on B and both are in "CREATING" state, then B should be published before A,
 otherwise the publishing check of A will fail.
 
 The dependencies may be created only on the artifacts which belong to the same

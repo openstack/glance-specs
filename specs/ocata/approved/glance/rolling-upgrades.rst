@@ -63,8 +63,8 @@ listed in [GOV1]_.  They are:
         This plan should clearly call out the supported configuration(s) that
         are expected to work, unless there are no such caveats. This does not
         require complete elimination of downtime during upgrades, but rather
-        reducing the scope from “all services” to “some services at a time.” In
-        other words, “restarting all API services together” is a reasonable
+        reducing the scope from "all services" to "some services at a time." In
+        other words, "restarting all API services together" is a reasonable
         restriction.
 
     The Glance services consist of the Glance API server and the optional

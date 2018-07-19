@@ -25,7 +25,7 @@ Optionals (please remove this line and fill or remove the rest until End of Temp
 :timeline: <Estimation of the time needed to complete the work.>
 
 :link: <Link to the change in gerrit that already would provide the `solution`.
-       After commiting the Spec Lite depend the change to the Spec Lite commit.>
+       After committing the Spec Lite depend the change to the Spec Lite commit.>
 
 :reviewers: <If reviewers has been agreed for the functionality, list them here.>
 

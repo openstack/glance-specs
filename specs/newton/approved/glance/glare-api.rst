@@ -185,7 +185,7 @@ glossary and list of Use Cases.
 * *Artifact Blob* - property type that defines binary data for Artifact.
   User can download Artifact blob from Glare. Each blob property has a flag
   *external*, that indicates if the property was created during file upload
-  (False) or by direct user request (True). In other words, “external” means
+  (False) or by direct user request (True). In other words, "external" means
   that blob property url is just a reference to some external file and Glare
   does not manage the blob operations in that case.
   Json schema that defines blob format:
