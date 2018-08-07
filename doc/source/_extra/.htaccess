@@ -12,3 +12,9 @@ Redirect 301 /specs/queens/approved/python-glanceclient/no-schema-validation.htm
 Redirect 301 /specs/untargeted/glance/lite-spec-db-sync-check.html /specs/queens/implemented/glance/lite-spec-db-sync-check.html
 Redirect 301 /specs/rocky/approved/glance/spec-lite-deprecate-owner_is_tenant.rst /specs/rocky/implemented/glance/spec-lite-deprecate-owner_is_tenant.rst
 Redirect 301 /specs/rocky/approved/glance/Support-revert-pending-delete.rst /specs/rocky/implemented/glance/Support-revert-pending-delete.rst
+Redirect 301 /specs/rocky/approved/glance/mitigate-ossn-0075.rst /specs/rocky/implemented/glance/mitigate-ossn-0075.rst
+Redirect 301 /specs/rocky/approved/glance/multihash.rst /specs/rocky/implemented/glance/multihash.rst
+Redirect 301 /specs/rocky/approved/glance/multi-store.rst /specs/rocky/implemented/glance/multi-store.rst
+Redirect 301 /specs/rocky/approved/glance/operator-image-workflow.rst /specs/rocky/implemented/glance/operator-image-workflow.rst
+Redirect 301 /specs/rocky/approved/glance/remove-v1.rst /specs/rocky/implemented/glance/remove-v1.rst
+Redirect 301 /specs/rocky/approved/glance_store/deprecate-store_capabilities_update_min_interval.rst /specs/rocky/implemented/glance_store/deprecate-store_capabilities_update_min_interval.rst

@@ -10,6 +10,13 @@ Rocky implemented specs for Glance:
 
    glance/*
 
-No specs or lite-specs are yet implemented for glance_store in Rocky.
+Rocky implemented specs for glance_store:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   glance_store/*
+
 
 No specs or lite-specs are yet implemented for python-glanceclient in Rocky.

@@ -15,13 +15,7 @@ Rocky approved specs for Glance:
    glance/*
    glance/image-import/*
 
-Rocky approved specs for glance_store:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   glance_store/*
+There are no approved yet unimplemented specs for glance_store in Rocky.
 
 Rocky approved specs for python-glanceclient:
 
