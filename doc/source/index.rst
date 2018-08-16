@@ -43,6 +43,7 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
+   priorities/stein-priorities
    priorities/rocky-priorities
    previous-priorities
 
@@ -56,7 +57,7 @@ Current
    :glob:
    :maxdepth: 1
 
-   specs/rocky/*
+   specs/stein/*
    specs/untargeted/*
 
 .. Future
@@ -72,7 +73,8 @@ Past
 .. toctree::
    :glob:
    :maxdepth: 1
-   
+
+   specs/rocky/*
    specs/queens/*
    specs/pike/*
    specs/ocata/*
