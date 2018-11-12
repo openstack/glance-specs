@@ -36,7 +36,7 @@ release.
 
 .. _support python 3.5: https://specs.openstack.org/openstack/glance-specs/specs/pike/approved/glance/lite-specs.html#community-goal-support-python-3-5
 .. _control plane API endpoints deployment via WSGI: https://specs.openstack.org/openstack/glance-specs/specs/pike/approved/glance/lite-specs.html#community-goal-control-plane-api-endpoints-deployment-via-wsgi
-.. _image import refactor: http://specs.openstack.org/openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html
+.. _image import refactor: https://specs.openstack.org/openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html
 
 
 Important dates

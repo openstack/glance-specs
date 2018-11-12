@@ -42,10 +42,10 @@ Here are the Ocata review priorities.
 
 .. _eliminate oslo incubated code: https://bugs.launchpad.net/python-glanceclient/+bug/1639487
 .. _image import refactor: http://specs.openstack.org/openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html
-.. _community images: http://specs.openstack.org/openstack/glance-specs/specs/newton/approved/glance/community_visibility.html
-.. _rolling upgrades: http://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/rolling-upgrades.html
-.. _database strategy: http://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/database-strategy-for-rolling-upgrades.html
-.. _alembic migrations: http://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/alembic-migrations.html
+.. _community images: https://specs.openstack.org/openstack/glance-specs/specs/newton/approved/glance/community_visibility.html
+.. _rolling upgrades: https://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/rolling-upgrades.html
+.. _database strategy: https://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/database-strategy-for-rolling-upgrades.html
+.. _alembic migrations: https://specs.openstack.org/openstack/glance-specs/specs/ocata/approved/glance/alembic-migrations.html
 
 
 Important dates
