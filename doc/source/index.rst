@@ -44,7 +44,6 @@ of those discussions:
    :maxdepth: 1
 
    priorities/train-priorities
-   priorities/stein-priorities
    previous-priorities
 
 Specifications
@@ -58,7 +57,6 @@ Current
    :maxdepth: 1
 
    specs/train/*
-   specs/stein/*
    specs/untargeted/*
 
 .. Future
@@ -75,6 +73,7 @@ Past
    :glob:
    :maxdepth: 1
 
+   specs/stein/*
    specs/rocky/*
    specs/queens/*
    specs/pike/*

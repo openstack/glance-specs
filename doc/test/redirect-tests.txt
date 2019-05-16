@@ -19,3 +19,9 @@
 /specs/rocky/approved/glance/operator-image-workflow.rst 301 /specs/rocky/implemented/glance/operator-image-workflow.rst
 /specs/rocky/approved/glance/remove-v1.rst 301 /specs/rocky/implemented/glance/remove-v1.rst
 /specs/rocky/approved/glance_store/deprecate-store_capabilities_update_min_interval.rst 301 /specs/rocky/implemented/glance_store/deprecate-store_capabilities_update_min_interval.rst
+/specs/stein/approved/glance/all-visibility-image-filter.rst 301 /specs/stein/implemented/glance/all-visibility-image-filter.rst
+/specs/stein/approved/glance/windows-support.rst 301 /specs/stein/implemented/glance/windows-support.rst
+/specs/stein/approved/glance/spec-lite-locations-with-validation-data.rst 301 /specs/stein/implemented/glance/spec-lite-locations-with-validation-data.rst
+/specs/stein/approved/glance/spec-lite-add-description-field-to-image.rst 301 /specs/stein/implemented/glance/spec-lite-add-description-field-to-image.rst
+/specs/stein/approved/glance/spec-lite-readding-glance-cache-manage-for-v2.rst 301 /specs/stein/implemented/glance/spec-lite-readding-glance-cache-manage-for-v2.rst
+/specs/stein/approved/python-glanceclient/spec-lite-show-store-info.rst 301 /specs/stein/implemented/python-glanceclient/spec-lite-show-store-info.rst
