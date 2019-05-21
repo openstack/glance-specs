@@ -13,4 +13,5 @@ Train approved specs for Glance:
    :maxdepth: 1
 
    glance/*
+   glance_store/*
 
