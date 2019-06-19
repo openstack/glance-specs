@@ -6,5 +6,11 @@ Train Approved Specifications
    :glob:
    :maxdepth: 1
 
-TODO: fill this in until a new approved space is added.
+Train approved specs for Glance:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   glance/*
 
