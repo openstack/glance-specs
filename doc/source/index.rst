@@ -43,6 +43,7 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
+   priorities/victoria-priorities
    priorities/ussuri-priorities
    priorities/train-priorities
    previous-priorities
@@ -57,6 +58,7 @@ Current
    :glob:
    :maxdepth: 1
 
+   specs/victoria/*
    specs/ussuri/*
    specs/train/*
    specs/untargeted/*
