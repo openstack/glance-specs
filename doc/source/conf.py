@@ -16,8 +16,6 @@ import subprocess
 import sys
 import os
 
-import openstackdocstheme
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -30,7 +28,7 @@ import openstackdocstheme
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = [
               'sphinx.ext.todo',
               'sphinx.ext.viewcode',
               'sphinxcontrib.blockdiag',
@@ -120,9 +118,6 @@ html_theme = 'openstackdocs'
 # documentation.
 #html_theme_options = {}
 
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [openstackdocstheme.get_html_theme_path()]
-
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 #html_title = None
@@ -138,12 +133,6 @@ html_theme_path = [openstackdocstheme.get_html_theme_path()]
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
 #html_favicon = None
-
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-git_cmd = ["git", "log", "--pretty=format:'%ad, commit %h'", "--date=local",
-    "-n1"]
-html_last_updated_fmt = subprocess.check_output(git_cmd).decode('utf-8')
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -188,8 +177,6 @@ html_use_index = False
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Glance-Specsdoc'
-
-html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # -- Options for LaTeX output --------------------------------------------------
 
