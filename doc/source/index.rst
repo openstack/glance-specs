@@ -44,8 +44,6 @@ of those discussions:
    :maxdepth: 1
 
    priorities/victoria-priorities
-   priorities/ussuri-priorities
-   priorities/train-priorities
    previous-priorities
 
 Specifications
@@ -59,8 +57,6 @@ Current
    :maxdepth: 1
 
    specs/victoria/*
-   specs/ussuri/*
-   specs/train/*
    specs/untargeted/*
 
 .. Future
@@ -77,6 +73,8 @@ Past
    :glob:
    :maxdepth: 1
 
+   specs/ussuri/*
+   specs/train/*
    specs/stein/*
    specs/rocky/*
    specs/queens/*
