@@ -40,9 +40,10 @@ extensions = [
              ]
 
 # config for openstackdocstheme
-repository_name = 'openstack/glance-specs'
-bug_project = 'glance'
-bug_tag = 'glance-specs'
+openstackdocs_repo_name = 'openstack/glance-specs'
+openstackdocs_auto_name = False
+openstackdocs_bug_project = 'glance'
+openstackdocs_bug_tag = 'glance-specs'
 
 # Feed configuration for yasfb
 feed_base_url = 'http://specs.openstack.org/openstack/glance-specs'
@@ -99,7 +100,7 @@ add_module_names = False
 show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'native'
 
 # A list of ignored prefixes for module index sorting.
 modindex_common_prefix = ['glance-specs.']
