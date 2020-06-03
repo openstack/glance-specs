@@ -14,3 +14,10 @@ Victoria approved specs for Glance:
 
     glance/*
 
+Victoria approved specs for glance_store:
+
+.. toctree::
+    :glob:
+    :maxdepth: 1
+
+    glance_store/*
