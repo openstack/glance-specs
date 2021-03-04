@@ -1,0 +1,1 @@
+./../../spec-lite-template.rst
