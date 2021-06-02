@@ -13,3 +13,11 @@ Xena approved specs for glance:
     :maxdepth: 1
 
     glance/*
+
+Xena approved specs for glance store:
+
+.. toctree::
+    :glob:
+    :maxdepth: 1
+
+    glance_store/*
