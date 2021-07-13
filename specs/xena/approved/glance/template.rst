@@ -1,1 +1,1 @@
-./../../template.rst
+../../../template.rst

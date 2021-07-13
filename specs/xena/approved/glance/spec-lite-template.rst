@@ -1,1 +1,1 @@
-./../../spec-lite-template.rst
+../../../spec-lite-template.rst
