@@ -43,7 +43,7 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
-   priorities/xena-priorities
+   priorities/yoga-priorities
    previous-priorities
 
 Specifications
@@ -56,7 +56,7 @@ Current
    :glob:
    :maxdepth: 1
 
-   specs/xena/*
+   specs/yoga/*
    specs/untargeted/*
 
 .. Future
@@ -73,6 +73,7 @@ Past
    :glob:
    :maxdepth: 1
 
+   specs/xena/*
    specs/wallaby/*
    specs/victoria/*
    specs/ussuri/*
