@@ -62,15 +62,15 @@ The following list is roughly in priority order (highest to lowest).
 .. _Xiyuan Wang: https://launchpad.net/~wangxiyuan
 .. _Lance Bragstad: https://launchpad.net/~lbragstad
 
-.. _image import refactor: http://specs.openstack.org/openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html
+.. _image import refactor: https://specs.openstack.org/openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html
 .. _multihash: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/multihash.html
 .. _inject metadata automatically: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/inject-automatic-metadata.html
 .. _fix ossn-0075: https://review.openstack.org/#/c/468179/
 .. _deprecate glance registry: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/deprecate-registry.html
-.. _refactor glance scrubber: http://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/lite-spec-scrubber-refactor.html
-.. _remove v1: http://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/remove-v1.html
-.. _validation switch: http://specs.openstack.org/openstack/glance-specs/specs/queens/approved/python-glanceclient/no-schema-validation.html
-.. _deprecate v1 support: http://specs.openstack.org/openstack/glance-specs/specs/queens/approved/python-glanceclient/deprecate-v1-support.html
+.. _refactor glance scrubber: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/lite-spec-scrubber-refactor.html
+.. _remove v1: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/remove-v1.html
+.. _validation switch: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/python-glanceclient/no-schema-validation.html
+.. _deprecate v1 support: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/python-glanceclient/deprecate-v1-support.html
 .. _policy in code: https://specs.openstack.org/openstack/glance-specs/specs/queens/approved/glance/spec-lite-policy-and-docs-in-code.html
 
 
