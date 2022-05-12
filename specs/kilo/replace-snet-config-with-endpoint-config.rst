@@ -132,7 +132,7 @@ Documentation Impact
 ====================
 
 * Document new endpoint configuration option.
-* Remove documentation for snet confiugration option.
+* Remove documentation for snet configuration option.
 
 
 References
