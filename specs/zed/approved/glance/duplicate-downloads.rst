@@ -93,75 +93,37 @@ uncached). This approach is racey and can result in many responses
 downloading directly from the store and a subset of those teeing
 data to the same location on the filesystem.
 
-Ideally, any image download request that is received, regardless
-of cache state, would both encounter the same interface and
-execute the same code path to retrieve the image. We currently
-adhere to the former (i.e. consistent interface), but not the
-latter (i.e. we return different iterators based on cache state).
-This introduces unnecessary complexity into the system.
+The proposed solution is for the first download request to instead of writing
+the whole file to the cache, we write the file to cache in chunks. Then, the
+subsequent download requests read from the chunks that have been written. Once
+the subsequent request finishes reading all the available chunks in the cache,
+it will wait for the next available chunk written to the cache by the first
+request. It will keep doing this until the first request finishes all the
+chunks.
 
-The proposed solution is to remove this complexity by, one,
-refactoring the middleware to fully encapsulate the work to
-retrieve the image from the store and write it to the cache, and
-two, serve the download requests from the cache irrespective of
-whether the image was already cached when the request was
-received.  While the exact mechanism for achieving this might
-vary, one example of how this can be achieved follows:
+For the first request:
 
 .. code-block:: none
 
-    if the cache file does not exist:
-        create it
-        spawn a worker
-    return waiting iterator(the cache file)
+    if the cache entry does not exist:
+        mark the image "caching"
+        create a new folder in the cache directory with the image id
+        take the iterator from the download (like we are doing now)
+        write the data in 1GB chunks to cache
+        upon finish, mark the image "cached"
 
-    def worker():
-        request image download information via API request
-        download image to cache
+For the subsequent request:
 
-    def waiting_iterator(the cache file):
-        with open(the cache file) as fp:
-            while True:
-                chunk = read in the next chunk
-                if chunk:
-                    yield chunk
-                elif the cache file is still being cached
-                    wait a bit
-                else:
-                    We done!
-                    break
+.. code-block:: none
 
-A few notes regarding implementation:
+    if the image is marked "caching" or "cached":
+        read the chunk from the cache until we get all the expected chunks
+        if a chunk is not available:
+        wait for it to be written by the first request
 
-#. The worker could be one or more processes or threads.
-#. The data returned to the clients should be consistent and
-   correct regardless of the cache state or how the data is
-   downloaded and stored in the cache.
-#. Download time can vary based on the current cache state.
-#. The implementation must be resilient. Multiple requests can
-   fail if the cache fails. Intelligent retries must be
-   implemented.
-
-This change helps enforce separation between the code that serves
-the data to the client and the cache middleware implementation.
-The cache middleware is a caching proxy and is responsible for
-downloading data to the cache in a resilient manner and reliably
-returning data requested from the cache. Any implementation that
-would leverage the cache, need not worry about the interactions
-between the backend store and the cache. More specifically, with
-the logic to download the images moved out of the iterators and
-behind the proxy, requests are no longer dependent upon each
-other. While the first request to the cache for a particular image
-might trigger a cache miss (worker spawned to download the image),
-the success of that request is not tied to the success of the
-image being cached or the success of any future request for the
-image.
-
-One additional consideration, out of scope for this change, is
-that some requests might prefer to download directly from the
-store rather than the cache. For the purposes of this change, if
-the caching middleware is enabled, all requests will be downloaded
-from the cache.
+.. note::
+   Note: The hit count of cached image should not be increased for each chunk read,
+   instead it should be increased once per actual request to read the image from cache.
 
 Alternatives
 ------------
@@ -177,52 +139,17 @@ Alternatives
    to disabled, it should then be deprecated and defaulted to
    enabled in the next release.
 
-2. Update the cache middleware response handler to return a
-   waiting iterator (see below) if the image is cached or caching.
-   This ensures only the first request to reach the response
-   handler results in the data being downloaded from the object
-   store. All other requests will stream from the cache.
+2. To avoid streaming partial image to multiple clients in case
+   of the initial caching request failing we could block all the
+   subsequent requests until the image is fully in cache and serve
+   those only from cache.
 
-   Update the cache middleware request handler to return a waiting
-   iterator (see below) if the image is cached or caching. This is
-   an optimization to prevent requests unnecessarily reaching the
-   root app and generating a new download iterator likely
-   resulting in a new connection being established when the cache
-   has already initiated or completed.
-
-   The iterator will allow download from the cache as data becomes
-   available. The iterator will read until the image is fully
-   cached and all data is read. If the cache of the image fails,
-   the cached image will be cleaned up, and each request
-   downloading from the cache will fail requiring a retry by the
-   client.
-
-   In both the case where eliminate_duplicate_downloads is enabled
-   (new behavior) or eliminate_duplicate_downloads is disabled
-   (current behavior) up to n requests, where n is the number of
-   requests made, will result in a cache miss in the cache
-   middleware request handler and reach the root app, returning a
-   download iterator back to the cache middleware response
-   handler. In both cases, the first response arriving back to the
-   cache middleware will result in a download from the object
-   store streamed to the client and stored in the cache.
-
-   When eliminate_duplicate_downloads is disabled (current behavior),
-   all responses reaching the cache middleware from the root app
-   will return the download iterator from the root app, resulting
-   in a download from the backend store for each request arriving
-   before the image is fully cached. When eliminate_duplicate_downloads
-   is enabled (new behavior), only the first response will result
-   in a download from the backend store.  All other requests will
-   stream from the cache using a waiting iterator.
-
-   Enabling the eliminate_duplicate_downloads configuration reduces
-   failures and improves performance when a large number of image
-   download requests are made. It comes at the cost of all
-   downloads occurring while an image is being cached depending on
-   that single cache to be successful. This means a cache failure
-   could result in more clients needing to retry, potentially
-   after waiting for nearly the entire image to download.
+   This approach would cause significant delay serving the rest of
+   the clients with a benefit of saved bandwidth in those rare cases
+   where the caching gets interrupted by the image or store going
+   unavailable. Due to possible very long delays on large images this
+   would complicate the download process as some kind of keepalive for
+   the client connection would be needed to avoid timeouts.
 
 3. Create a lock within the middleware request handler: This
    prevents requests from reaching the root app and establishing a
@@ -296,12 +223,12 @@ Implementation
 Assignee(s)
 -----------
 
-Primary assignee: unassigned
+Primary assignee: Mridula Joshi
 
 Reviewers
 ---------
 
-Core reviewer(s): unassigned
+Core reviewer(s): Erno Kuvaja
 
 
 Work Items
@@ -309,11 +236,9 @@ Work Items
 
 1. Add tests
 2. Update the cache methods in the drivers
-3. Add multi-process / thread safe cache worker(s) to middleware
-4. Update the cache request handler
-5. Update the cache response handler
-6. Update the docs
-
+3. Update the cache request handler
+4. Update the cache response handler
+5. Update the docs
 
 Dependencies
 ============
@@ -324,7 +249,8 @@ None
 Testing
 =======
 
-SEE Problem Description for scenarios to be tested.
+* Unit Tests
+* Functional Tests
 
 
 Documentation Impact
@@ -336,4 +262,4 @@ Document any new configuration options, if any.
 References
 ==========
 
-None
+https://review.opendev.org/c/openstack/glance-specs/+/206120
