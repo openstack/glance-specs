@@ -1,12 +1,12 @@
-=======================
-Antelope Specifications
-=======================
+=====================
+2023.1 Specifications
+=====================
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-Antelope implemented specs:
+2023.1 implemented specs:
 
 .. toctree::
    :glob:
@@ -14,7 +14,7 @@ Antelope implemented specs:
 
    implemented/*
 
-Antelope approved (but not implemented) specs:
+2023.1 approved (but not implemented) specs:
 
 .. toctree::
    :glob:
