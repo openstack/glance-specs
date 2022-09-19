@@ -1,26 +1,29 @@
 # This file contains redirects to handle existing URLs for specs that
 # have been moved
+# NOTE TO REVIEWERS: this file is used by httpd, so it deals with the
+# *built* documentation files ... thus the normal case is that we are
+# mapping .html -> .html (NOT .rst -> .rst)
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/deprecate-registry.html /openstack/glance-specs/specs/queens/implemented/glance/deprecate-registry.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/inject-automatic-metadata.html /openstack/glance-specs/specs/queens/implemented/glance/inject-automatic-metadata.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/lite-spec-scrubber-refactor.html /openstack/glance-specs/specs/queens/implemented/glance/lite-spec-scrubber-refactor.html
-Redirect 301 /openstack/glance-specs/specs/queens/approved/python-glanceclient/deprecate-v1-support.rst /openstack/glance-specs/specs/rocky/approved/python-glanceclient/deprecate-v1-support.rst
+Redirect 301 /openstack/glance-specs/specs/queens/approved/python-glanceclient/deprecate-v1-support.html /openstack/glance-specs/specs/rocky/approved/python-glanceclient/deprecate-v1-support.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/multihash.html /openstack/glance-specs/specs/rocky/approved/glance/multihash.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/remove-registry-v1.html /openstack/glance-specs/specs/rocky/approved/glance/remove-registry-v1.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/glance/remove-v1.html /openstack/glance-specs/specs/rocky/approved/glance/remove-v1.html
 Redirect 301 /openstack/glance-specs/specs/mitaka/approved/image-import/image-import-refactor.html /openstack/glance-specs/specs/rocky/approved/glance/image-import/image-import-refactor.html
 Redirect 301 /openstack/glance-specs/specs/queens/approved/python-glanceclient/no-schema-validation.html /openstack/glance-specs/specs/untargeted/python-glanceclient/no-schema-validation.html
 Redirect 301 /openstack/glance-specs/specs/untargeted/glance/lite-spec-db-sync-check.html /openstack/glance-specs/specs/queens/implemented/glance/lite-spec-db-sync-check.html
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/spec-lite-deprecate-owner_is_tenant.rst /openstack/glance-specs/specs/rocky/implemented/glance/spec-lite-deprecate-owner_is_tenant.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/Support-revert-pending-delete.rst /openstack/glance-specs/specs/rocky/implemented/glance/Support-revert-pending-delete.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/mitigate-ossn-0075.rst /openstack/glance-specs/specs/rocky/implemented/glance/mitigate-ossn-0075.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/multihash.rst /openstack/glance-specs/specs/rocky/implemented/glance/multihash.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/multi-store.rst /openstack/glance-specs/specs/rocky/implemented/glance/multi-store.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/operator-image-workflow.rst /openstack/glance-specs/specs/rocky/implemented/glance/operator-image-workflow.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/remove-v1.rst /openstack/glance-specs/specs/rocky/implemented/glance/remove-v1.rst
-Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance_store/deprecate-store_capabilities_update_min_interval.rst /openstack/glance-specs/specs/rocky/implemented/glance_store/deprecate-store_capabilities_update_min_interval.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/all-visibility-image-filter.rst /openstack/glance-specs/specs/stein/implemented/glance/all-visibility-image-filter.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/windows-support.rst /openstack/glance-specs/specs/stein/implemented/glance/windows-support.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-locations-with-validation-data.rst /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-locations-with-validation-data.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-add-description-field-to-image.rst /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-add-description-field-to-image.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-readding-glance-cache-manage-for-v2.rst /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-readding-glance-cache-manage-for-v2.rst
-Redirect 301 /openstack/glance-specs/specs/stein/approved/python-glanceclient/spec-lite-show-store-info.rst /openstack/glance-specs/specs/stein/implemented/python-glanceclient/spec-lite-show-store-info.rst
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/spec-lite-deprecate-owner_is_tenant.html /openstack/glance-specs/specs/rocky/implemented/glance/spec-lite-deprecate-owner_is_tenant.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/Support-revert-pending-delete.html /openstack/glance-specs/specs/rocky/implemented/glance/Support-revert-pending-delete.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/mitigate-ossn-0075.html /openstack/glance-specs/specs/rocky/implemented/glance/mitigate-ossn-0075.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/multihash.html /openstack/glance-specs/specs/rocky/implemented/glance/multihash.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/multi-store.html /openstack/glance-specs/specs/rocky/implemented/glance/multi-store.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/operator-image-workflow.html /openstack/glance-specs/specs/rocky/implemented/glance/operator-image-workflow.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance/remove-v1.html /openstack/glance-specs/specs/rocky/implemented/glance/remove-v1.html
+Redirect 301 /openstack/glance-specs/specs/rocky/approved/glance_store/deprecate-store_capabilities_update_min_interval.html /openstack/glance-specs/specs/rocky/implemented/glance_store/deprecate-store_capabilities_update_min_interval.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/all-visibility-image-filter.html /openstack/glance-specs/specs/stein/implemented/glance/all-visibility-image-filter.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/windows-support.html /openstack/glance-specs/specs/stein/implemented/glance/windows-support.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-locations-with-validation-data.html /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-locations-with-validation-data.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-add-description-field-to-image.html /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-add-description-field-to-image.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/glance/spec-lite-readding-glance-cache-manage-for-v2.html /openstack/glance-specs/specs/stein/implemented/glance/spec-lite-readding-glance-cache-manage-for-v2.html
+Redirect 301 /openstack/glance-specs/specs/stein/approved/python-glanceclient/spec-lite-show-store-info.html /openstack/glance-specs/specs/stein/implemented/python-glanceclient/spec-lite-show-store-info.html
