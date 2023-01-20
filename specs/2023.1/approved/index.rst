@@ -14,5 +14,10 @@
 
     glance_store/*
 
+2023.1 approved specs for glance:
 
+.. toctree::
+    :glob:
+    :maxdepth: 1
 
+    glance/*
