@@ -43,7 +43,7 @@ of those discussions:
    :glob:
    :maxdepth: 1
 
-   priorities/2023.1-priorities
+   priorities/2023.2-priorities
    previous-priorities
 
 Specifications
@@ -56,7 +56,7 @@ Current
    :glob:
    :maxdepth: 1
 
-   specs/2023.1/*
+   specs/2023.2/*
    specs/untargeted/*
 
 .. Future
@@ -73,6 +73,7 @@ Past
    :glob:
    :maxdepth: 1
 
+   specs/2023.1/*
    specs/zed/*
    specs/yoga/*
    specs/xena/*
