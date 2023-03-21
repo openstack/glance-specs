@@ -69,3 +69,13 @@ confidence in the Jenkins result), please execute the following command::
 After running ``tox``, the documentation will be available for viewing in HTML
 format in the ``doc/build/`` directory. Please do not checkin the generated
 HTML files as a part of your commit.
+
+At the start of a new cycle, the right files and directories can be created and modified using the following command:
+
+  $ tox -eprepare-next-cycle <cycle>
+
+For instance:
+
+  $ tox -eprepare-next-cycle 2023.2
+
+The changes should then be reviewed and committed manually.
