@@ -51,7 +51,8 @@ There will be 3 phases in which the work will be done as follows:
 
 3. Remove ``show_multiple_locations`` config option when it is no longer
    required by other services (cinder/nova) to perform operations on
-   locations. This will mostly be done in B or C cycle.
+   locations. This will mostly be done 1 or 2 cycles after the consumers
+   have adapted the new location APIs to handle the upgrade cases.
 
 The config option ``show_multiple_locations`` has been deprecated since Newton
 but we will keep the config option until the consumers of glance locations
@@ -137,7 +138,7 @@ Alternatives
   images with the ``admin_or_service`` role. This will require the consumers
   to provide admin credentials during add or get of an image to get the
   location.
-  This was the original proposal but due to the disagreement here [4]_, we
+  This was the original proposal but due to the disagreement here [3]_, we
   changed the design to the current proposal.
 
 * Another alternative is to add this functionality in the import workflow.
@@ -171,12 +172,30 @@ We are going to add 2 new location APIs:
   This will add a new location to an existing image.
   The request body will contain the location URL and an optional parameter,
   ``do_secure_hash``, which will tell the API if we want to do the checksum or
-  not. The ``do_secure_hash`` flag is required by the HTTP Store to make it
-  compatible with new location add API.
-  We will allow ``validation data`` [3]_ to be passed in case of HTTP store
-  else glance will calculate the image hash. If both ``do_secure_hash`` and
-  ``validation data`` are passed, then we will compare them and fail the
-  location add operation if they don't match.
+  not. The consumer APIs like nova, cinder, HTTP store etc, should pass the
+  ``do_secure_hash`` flag since glance does not calculate the checksum
+  automatically in these cases.
+  We will also allow passing ``validation data`` [4]_ which will behave in
+  the following manner with the ``do_secure_hash`` parameter:
+
+  * do_secure_hash = True, validation_data = {}
+    Calculate the checksum and hash by reading the image.
+  * do_secure_hash = False, validation_data = <checksum, hash>
+    Validate the checksum and hash data provided and add it to the image.
+    We will not be calculating the image checksum and hash in this case
+    so it is the responsibility of the consumer of location ADD API to
+    provide the correct values in the validation_data parameter.
+  * do_secure_hash = True, validation_data = <checksum, hash>
+    Calculate the checksum and hash by reading the image and compare it
+    with the validation_data provided. we will fail the location add operation
+    if the values don't match.
+
+  Unlike old location API, we will not provide support of adding a location
+  on a particular index. If we want to get the benefit of indexes, we can
+  use the old location APIs or set location strategy as store_type [5]_.
+  A new location strategy ``store_identifier`` is proposed [6]_ and should be
+  useful to download image from a specific store in case multiple stores are
+  configured.
 
   POST /v2/images/{image_id}/locations
 
@@ -185,8 +204,13 @@ We are going to add 2 new location APIs:
     .. code-block:: json
 
         {
-            "url": "cinder://lvmdriver-1/0f031ed1-5872-43d5-a638-4b0d07c10ab5",
+            "url": "cinder://lvmdriver-1/1a304872-b0ca-4992-b2c2-6874c6d5d5f9",
             "do_secure_hash": false,
+            "validation_data": {
+                "checksum": "b874c39491a2377b8490f5f1e89761a4",
+                "os_hash_algo": "sha512",
+                "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
+            }
         }
 
   * JSON response body
@@ -196,13 +220,35 @@ We are going to add 2 new location APIs:
     .. code-block:: json
 
         {
-            "url": "cinder://lvmdriver-1/0f031ed1-5872-43d5-a638-4b0d07c10ab5",
-            "metadata": "{'store': 'lvmdriver-1',
-                          'do_secure_hash': false}"
+            "checksum": "b874c39491a2377b8490f5f1e89761a4",
+            "container_format": "bare",
+            "created_at": "2023-05-03T21:30:21Z",
+            "disk_format": "qcow2",
+            "file": "/v2/images/57124e08-3691-4713-82cc-213dc5c7e242/file",
+            "id": "57124e08-3691-4713-82cc-213dc5c7e242",
+            "min_disk": 0,
+            "min_ram": 0,
+            "name": "test-image",
+            "owner": "d6634f35c00f409883ecb10361b556c3",
+            "properties": {
+              "os_hidden": false,
+              "os_hash_algo": "sha512",
+              "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
+              "stores": "lvmdriver-1",
+            },
+            "protected": false,
+            "schema": "/v2/schemas/image",
+            "size": 16300544,
+            "status": "active",
+            "tags": [],
+            "updated_at": "2023-05-03T21:32:35Z",
+            "virtual_size": 117440512,
+            "visibility": "shared"
         }
 
-    - Error - 409 (Location already exists), 403 (Forbidden for users that are
-      not owner), 400 (BadRequest if image is not in QUEUED state)
+    - Error - 409 (Location already exists or if image is not in QUEUED
+      state), 403 (Forbidden for users that are not owner), 400 (BadRequest
+      if hash validation fails)
 
 * Get Location(s)
 
@@ -230,12 +276,13 @@ We are going to add 2 new location APIs:
 
 The transition of image state during the image create operation will be as
 follows.
-Image upload (PUT), image stage (PUT) and location add (PATCH), will transition
+Image upload (PUT), image stage (PUT) and location add (POST), will transition
 the image from queued to the next state that could be either of the following:
 
 1. ``saving``
 2. ``uploading``
-3. ``active``
+3. ``importing``
+4. ``active``
 
 Below are the valid transitions for image from queued state.
 
@@ -274,11 +321,11 @@ None
 Other end user impact
 ---------------------
 
-Since the new APIs are for service to service interaction, there is not much
-value to expose them via glanceclient CLI. However, we will add methods to
-the glanceclient (that will call the new location APIs) that will be used by
-other consumer services like cinder and nova but those methods won't be
-exposed via the shell to end users.
+Since the new APIs are mainly for service to service interaction (except the
+HTTP store case), we will only expose the location add API via CLI. However,
+we will need to add methods for all APIs in openstacksdk (that will call
+the new location APIs) that will be used by other consumer services like
+cinder and nova.
 End users can still use the existing commands (that internally calls the
 image-update API) to perform operations on locations:
 
@@ -287,16 +334,31 @@ image-update API) to perform operations on locations:
   image.
 * ``glance location-update:`` Update metadata of an image's location.
 
-We will also add a new command that will allow end users to update the
-``location`` and ``metadata`` for HTTP store case.
+We will also add a new command to glanceclient and OSC that will allow end
+users to add the location ``url`` and ``metadata`` for HTTP store case.
 
-* ``glance direct-location --location <location> --metadata
+* ``glance add-location-properties --url <location> --metadata
+  <key1=value1, key2=value2 ...>``
+* ``openstack add-location-properties --url <location> --metadata
   <key1=value1, key2=value2 ...>``
 
 Performance Impact
 ------------------
 
-None
+In the old location API, the consumers (nova, cinder) registered
+the location in glance and the checksum, hash etc values weren't
+calculated. After the consumers adapt to the new location API,
+providing the ``do_secure_hash`` parameter in the new location
+ADD API, glance will read the image and calculate the hash which
+will take significantly more time compared to the same operation
+being performed in the old location ADD API.
+The performance downside will result in creation of more secure
+images and the impact needs to be conveyed to the operators/end users
+with documentation and releasenotes. Also if we plan to make the
+value of ``do_secure_hash`` configurable on the consumer side,
+we will add suitable help text to convey the performance and security
+impact of enabling/disabling this option.
+
 
 Other deployer impact
 ---------------------
@@ -308,6 +370,18 @@ Developer impact
 
 Consumers like Cinder, Nova and HTTP store need to modify code to call the
 new client functions to access the API.
+Some of the key things to consider while implementing consumer side changes
+are:
+
+* We will use SDK to make the API calls. The changes to call new
+  location APIs will be in SDK and also in OSC/glanceclient for location
+  ADD in case of HTTP store.
+* Keep backward compatibility with old behavior. Glance should support
+  the legacy behavior as well as the new way to add/get locations. This is
+  useful in upgrade cases where one compute node is running 2023.1 (Antelope)
+  code and the other compute node has been upgraded to 2024.1 (CC) release.
+* Testing should be done to see if the existing functionalities supported
+  with the legacy location APIs works as expected with the new APIs.
 
 Implementation
 ==============
@@ -316,7 +390,7 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  abhishekk
+  pdeore
 
 Other contributors:
   whoami-rajat
@@ -328,6 +402,8 @@ Work Items
 
 * Modify consumers like cinder and nova and http store to use the new location
   APIs.
+
+* Add SDK support to call the new APIs.
 
 * Add a releasenote mentioning that we will remove the config option
   ``show_multiple_locations`` when the consumers (nova/cinder/http store)
@@ -360,9 +436,13 @@ References
 
 .. [2] https://wiki.openstack.org/wiki/OSSN/OSSN-0090
 
-.. [3] https://specs.openstack.org/openstack/glance-specs/specs/stein/implemented/glance/spec-lite-locations-with-validation-data.html
+.. [3] https://review.opendev.org/c/openstack/glance-specs/+/840882/2..15/specs/zed/approved/glance/new-location-info-apis.rst#b199
 
-.. [4] https://review.opendev.org/c/openstack/glance-specs/+/840882/2..15/specs/zed/approved/glance/new-location-info-apis.rst#b199
+.. [4] https://specs.openstack.org/openstack/glance-specs/specs/stein/implemented/glance/spec-lite-locations-with-validation-data.html
+
+.. [5] https://docs.openstack.org/glance/latest/contributor/api/glance.common.location_strategy.store_type.html
+
+.. [6] https://review.opendev.org/c/openstack/glance-specs/+/881951
 
 .. _Delete Image From Store: https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-from-store-detail#delete-image-from-store
 
