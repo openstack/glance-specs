@@ -65,8 +65,8 @@ config option).
 We will introduce 2 new policies, for each API performing different operations
 like add and get, as follows:
 
-1. The ``add policy`` can default to the project member or ``service`` role
-   (when it is implemented).
+1. The ``add policy`` can default to the ``project member`` or ``service``
+   role (when it is implemented).
 2. The ``get policy`` will default to the ``service`` role for authorization.
 
 Along with the new ``add policy``, we will add a check in the location add API
@@ -75,6 +75,90 @@ state and adding location when the image is in other states will be
 disallowed. This is done in order to prevent malicious users from modifying
 the image location again and again since the location added for the first time
 is the correct one as far as Glance is concerned.
+
+We will also introduce a new configuration parameter ``do_secure_hash`` on
+the glance side which will tell the API if we want to do the hash calculation
+or not. This will be useful in cases when nova, cinder etc, adds a location
+in glance since glance does not calculate the hash and checksum automatically
+in these cases. The value of ``do_secure_hash`` will be ``True`` by default.
+
+After nova or cinder send a request for adding a location for the VM snapshot
+or upload volume case respectively and ``do_secure_hash`` is ``True``, glance
+will start a background process that will calculate the hash of the image.
+Unless we have ``validation_data`` (in the request body) to be verified,
+image will be set to ``active`` state after registering the location even if
+the hash calculation is ongoing in the background. This is done so that the
+image can be used to create instances and bootable volumes instantly after
+we've registered the location and not wait for the hash calculation since
+it is a long running task. After the hash calculation completes, image
+properties will be updated with the ``checksum``, ``os_hash_algo`` and
+``os_hash_value`` values.
+
+Following are the cases of image transition with different values of
+``do_secure_hash`` and ``validation_data``:
+
+* ``do_secure_hash`` is ``True`` and ``validation_data`` is not None:
+
+  Image transition: (queued, importing, active)
+
+  In this case the consumer provides the hash values for validation and
+  hash is calculated by glance.
+  An example of this case will be providing validation_data for HTTP store.
+  Here image hash will be calculated and verified before setting image to
+  active state.
+
+* ``do_secure_hash`` is ``True`` and ``validation_data`` is None:
+
+  Image transition: (queued, active)
+
+  In this case validation data will not be provided by the consumer but
+  hash is calculated by glance.
+  Examples of this case will be when nova snapshots an instance or cinder
+  uploads a volume to image.
+  Here image hash calculation will be done and updated after setting
+  image to active state.
+  This is a tricky case because the consumer will have no idea if the
+  ``active`` image will ever have a hash value or not and if it should
+  wait for the hash to be populated in the image or not.
+  To handle this, we will set the ``os_hash_algo`` value in the image
+  properties so the consumer will know that hash calculation is ongoing
+  for this image and the hash will be populated here.
+  Here are the following cases:
+
+  * ``active`` image and no ``os_hash_algo``: This image will not have hash
+    value populated.
+  * ``active`` image and has ``os_hash_algo``:  Poll for ``active`` image
+    status and ``os_hash_algo`` until you get ``os_hash_value``.
+    Polling for ``active`` image status is optional since the image gets
+    active when ``validation_data`` is not provided and hash calculation
+    is ongoing in the background i.e. this case. The ``os_hash_algo`` value
+    will be popped if hash calculation fails.
+
+* ``do_secure_hash`` is ``False`` and ``validation_data`` is not None:
+
+  Image transition: (queued, active)
+
+  In this case validation data will be provided by the consumer and hash
+  is not calculated by glance.
+  An example of this case will be providing validation_data for HTTP store.
+  Here image hash will not be calculated and verified but directly set to
+  image with values provided by the user.
+
+* ``do_secure_hash`` is ``False`` and ``validation_data`` is None:
+
+  Image transition: (queued, active)
+
+  In this case validation data will not be provided by the consumer and
+  hash is not calculated by glance.
+  This can happen for all cases.
+  Here hash value won't be set in the image.
+
+If the hash calculation fails, we will add a retry mechanism that will
+reinitiate the task. We will add a new configuration option ``http_retries``
+with a default value of ``3`` i.e. the hash calculation will be executed
+maximum 3 times by default if the first and second tries fail.
+If after all the retries, the hash calculation still fails, we will not update
+the hash and checksum values and image will stay in ``active`` state.
 
 End-user access to image locations via the Image API is no longer necessary.
 Since Train, Glance has multiple stores support, and we have added API calls
@@ -90,7 +174,7 @@ new Location API.
    Nova can create an image record in Glance, snapshot a server image
    directly in the backend, and set the location on the image record.
    This use case is covered by the new add-location call, and having
-   its default policy be image owner or service.
+   its default policy be project member (image owner) or service.
 
 2. A user wants to have a single image record, but have image data
    stored in multiple locations for locality (i.e., to have image
@@ -170,25 +254,13 @@ We are going to add 2 new location APIs:
 * Add Location
 
   This will add a new location to an existing image.
-  The request body will contain the location URL and an optional parameter,
-  ``do_secure_hash``, which will tell the API if we want to do the checksum or
-  not. The consumer APIs like nova, cinder, HTTP store etc, should pass the
-  ``do_secure_hash`` flag since glance does not calculate the checksum
-  automatically in these cases.
-  We will also allow passing ``validation data`` [4]_ which will behave in
-  the following manner with the ``do_secure_hash`` parameter:
-
-  * do_secure_hash = True, validation_data = {}
-    Calculate the checksum and hash by reading the image.
-  * do_secure_hash = False, validation_data = <checksum, hash>
-    Validate the checksum and hash data provided and add it to the image.
-    We will not be calculating the image checksum and hash in this case
-    so it is the responsibility of the consumer of location ADD API to
-    provide the correct values in the validation_data parameter.
-  * do_secure_hash = True, validation_data = <checksum, hash>
-    Calculate the checksum and hash by reading the image and compare it
-    with the validation_data provided. we will fail the location add operation
-    if the values don't match.
+  The request body will contain the location URL and ``validation_data`` [4]_
+  (optional). The purpose of including validation_data in the request body
+  is when the consumer wants to validate the image hash or just directly wants
+  to add the hash values to the image. The cases of ``validation_data`` with
+  ``do_secure_hash`` are described in the `Proposed change`_ section.
+  An example where ``validation_data`` will be provided is the HTTP store case,
+  where the user will provide hash value for the HTTP image.
 
   Unlike old location API, we will not provide support of adding a location
   on a particular index. If we want to get the benefit of indexes, we can
@@ -205,9 +277,7 @@ We are going to add 2 new location APIs:
 
         {
             "url": "cinder://lvmdriver-1/1a304872-b0ca-4992-b2c2-6874c6d5d5f9",
-            "do_secure_hash": false,
             "validation_data": {
-                "checksum": "b874c39491a2377b8490f5f1e89761a4",
                 "os_hash_algo": "sha512",
                 "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
             }
@@ -220,30 +290,12 @@ We are going to add 2 new location APIs:
     .. code-block:: json
 
         {
-            "checksum": "b874c39491a2377b8490f5f1e89761a4",
-            "container_format": "bare",
-            "created_at": "2023-05-03T21:30:21Z",
-            "disk_format": "qcow2",
-            "file": "/v2/images/57124e08-3691-4713-82cc-213dc5c7e242/file",
-            "id": "57124e08-3691-4713-82cc-213dc5c7e242",
-            "min_disk": 0,
-            "min_ram": 0,
-            "name": "test-image",
-            "owner": "d6634f35c00f409883ecb10361b556c3",
-            "properties": {
-              "os_hidden": false,
-              "os_hash_algo": "sha512",
-              "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
-              "stores": "lvmdriver-1",
-            },
-            "protected": false,
-            "schema": "/v2/schemas/image",
-            "size": 16300544,
-            "status": "active",
-            "tags": [],
-            "updated_at": "2023-05-03T21:32:35Z",
-            "virtual_size": 117440512,
-            "visibility": "shared"
+            "url": "cinder://lvmdriver-1/1a304872-b0ca-4992-b2c2-6874c6d5d5f9",
+            "metadata": "{'store': 'lvmdriver-1'}"
+            "validation_data": {
+                "os_hash_algo": "sha512",
+                "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
+            }
         }
 
     - Error - 409 (Location already exists or if image is not in QUEUED
@@ -335,12 +387,12 @@ image-update API) to perform operations on locations:
 * ``glance location-update:`` Update metadata of an image's location.
 
 We will also add a new command to glanceclient and OSC that will allow end
-users to add the location ``url`` and ``metadata`` for HTTP store case.
+users to add the location ``url`` and ``validation-data`` for HTTP store case.
 
-* ``glance add-location-properties --url <location> --metadata
-  <key1=value1, key2=value2 ...>``
-* ``openstack add-location-properties --url <location> --metadata
-  <key1=value1, key2=value2 ...>``
+* ``glance add-location-properties --url <location> --validation-data
+  <os_hash_algo=value1, os_hash_value=value2>``
+* ``openstack image add location properties --url <location> --validation-data
+  <os_hash_algo=value1, os_hash_value=value2>``
 
 Performance Impact
 ------------------
@@ -348,17 +400,19 @@ Performance Impact
 In the old location API, the consumers (nova, cinder) registered
 the location in glance and the checksum, hash etc values weren't
 calculated. After the consumers adapt to the new location API,
-providing the ``do_secure_hash`` parameter in the new location
-ADD API, glance will read the image and calculate the hash which
-will take significantly more time compared to the same operation
-being performed in the old location ADD API.
+and the ``do_secure_hash`` config parameter is ``True`` (default),
+glance will read the image and calculate the hash in the background.
+The hash calculation will be a long running task so it will consume
+resources, however, this won't affect the operation requested by
+nova or cinder as the image will transition to ``active`` state even
+when the hash calculation is ongoing.
+
 The performance downside will result in creation of more secure
 images and the impact needs to be conveyed to the operators/end users
-with documentation and releasenotes. Also if we plan to make the
-value of ``do_secure_hash`` configurable on the consumer side,
-we will add suitable help text to convey the performance and security
-impact of enabling/disabling this option.
-
+with documentation and releasenotes. Since ``do_secure_hash`` will be a
+configurable parameter on glance side, we will add suitable help text
+to convey the performance and security impact of enabling/disabling this
+option.
 
 Other deployer impact
 ---------------------
@@ -402,6 +456,12 @@ Work Items
 
 * Modify consumers like cinder and nova and http store to use the new location
   APIs.
+
+* Add a new configuration parameter ``do_secure_hash`` in glance and document
+  it's impact.
+
+* Add a new configuration parameter ``http_retries`` in glance and document
+  it's usage.
 
 * Add SDK support to call the new APIs.
 
