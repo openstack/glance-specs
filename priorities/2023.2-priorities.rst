@@ -4,8 +4,102 @@
 2023.2 Project Priorities
 =========================
 
-TODO(pdeore): fill this in after the PTG
+The Bobcat Cycle priorities were discussed during Bobcat Virtual PTG.
+The preliminary list was maintained on the `Bobcat PTG etherpad`_.
+
+This list is an estimate of what the Glance project team can accomplish
+during the 2023.2 Cycle based on our developer's estimates of how much
+time they can commit to Glance.
+
+The following list is roughly indicates milestonewise priorities.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Priority Item
+     - Owner(s)
+     - Spec(s)
+     - Target release milestone
+   * - New Location APIs
+     - `Pranali Deore`_
+     - `new location apis`_
+     - M1
+   * - RBD Trash
+     - `Eric Harney`_
+     - No Spec yet
+     - M2
+   * - Image Encryption
+     - `Josephine Seifert`_
+     - `image encryption`_
+     - M2
+   * - All image APIs SDK Support
+     - `Mridula Joshi`_
+     - None
+     - M1
+   * - Tempest coverage for New Location APIs
+     - `Pranali Deore`_
+     - `new location apis`_
+     - M2
+   * - All Metadef APIs SDK Support
+     - `Mridula Joshi`_
+     - None
+     - M2
+   * - Remove/Migrate Single Store Tests
+     - `Pranali Deore`_
+     - None
+     - M3
+   * - Calculation multihash,checksum for existing location calls
+     - `Mridula Joshi`_
+     - No Spec Yet
+     - M3
 
 
+.. _Bobcat PTG etherpad: https://etherpad.opendev.org/p/glance-bobcat-ptg
+
+.. _Josephine Seifert: https://launchpad.net/~josei
+.. _Mridula Joshi: https://launchpad.net/~mrjoshi
+.. _Eric Harney: https://launchpad.net/~eharney
+.. _Pranali Deore: https://launchpad.net/~pranali-deore
+
+.. _new location apis: https://review.opendev.org/c/openstack/glance-specs/+/880030
+.. _image encryption: https://review.opendev.org/c/openstack/glance-specs/+/880627
 
 
+Important dates
+---------------
+
+This is an abbreviated list focused on dates relevant to Glance.  See
+`Bobcat Release Schedule`_ for the complete list for OpenStack.
+
+.. _Bobcat Release Schedule: https://releases.openstack.org/bobcat/schedule.html
+
+.. list-table::
+   :header-rows: 1
+
+   * - Milestone
+     - Week of
+     - What
+   * - R-21
+     - May 12
+     - Bobcat-1 Milestone
+   * - R-13
+     - Jul 07
+     - * Bobcat-2 Milestone
+       * **Glance Spec freeze**
+   * - R-6
+     - Aug 25
+     - glance_store Bobcat release (final release for non-client libraries)
+   * - R-5
+     - Sept 07
+     - * Bobcat-3 milestone
+       * **Glance feature freeze**
+       * python-glanceclient Bobcat release (final release for client libraries);
+   * - R-3
+     - Sept 15
+     - RC-1 release and **string freeze**
+   * - R-1
+     - Sept 29
+     - final RCs
+   * - R-0
+     - Oct 06
+     - **Bobcat release**
