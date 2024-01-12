@@ -4,8 +4,101 @@
 2024.1 Project Priorities
 =========================
 
-TODO(glance-ptl): fill this in after the PTG
+The Caracal Cycle priorities were discussed during Caracal Virtual PTG.
+The preliminary list was maintained on the `Caracal PTG etherpad`_.
+
+This list is an estimate of what the Glance project team can accomplish
+during the 2024.1 Cycle based on our developer's estimates of how much
+time they can commit to Glance.
+
+The following indicates milestonewise priorities.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Priority Item
+     - Owner(s)
+     - Spec(s)
+     - Target release milestone
+   * - New Location APIs
+     - `Pranali Deore`_
+     - `new location apis`_
+     - M2
+   * - Centralize DB for cache
+     - `Abhishek Kekane`_
+     - `centralize DB for cache`_
+     - M2
+   * - Deprecate Location Strategy
+     - `Abhishek Kekane`_
+     - `deprecate location strategy`_
+     - M2
+   * - Deprecate Cachemanage middleware
+     - `Abhishek Kekane`_
+     - `deprecate cachemanage middleware`_
+     - M2
+   * - Remove/Migrate Single Store Tests
+     - `Pranali Deore`_
+     - None
+     - M3
+   * - All image/metadef APIs OSC & SDK Support
+     - `Mridula Joshi`_
+     - None
+     - M3
+   * - Image Encryption
+     - `Josephine Seifert`_
+     - `image encryption`_
+     - M3
 
 
+.. _Caracal PTG etherpad: https://etherpad.opendev.org/p/oct2023-ptg-glance
+
+.. _Josephine Seifert: https://launchpad.net/~josei
+.. _Mridula Joshi: https://launchpad.net/~mrjoshi
+.. _Abhishek Kekane: https://launchpad.net/~abhishek-kekane
+.. _Pranali Deore: https://launchpad.net/~pranali-deore
+
+.. _new location apis: https://review.opendev.org/c/openstack/glance-specs/+/883491
+.. _centralize DB for cache: https://review.opendev.org/c/openstack/glance-specs/+/899367
+.. _deprecate location strategy: https://review.opendev.org/c/openstack/glance-specs/+/899804
+.. _deprecate cachemanage middleware: https://review.opendev.org/c/openstack/glance-specs/+/899805
+.. _image encryption: https://review.opendev.org/c/openstack/glance-specs/+/899856
 
 
+Important dates
+---------------
+
+This is an abbreviated list focused on dates relevant to Glance.  See
+`Caracal Release Schedule`_ for the complete list for OpenStack.
+
+.. _Caracal Release Schedule: https://releases.openstack.org/caracal/schedule.html
+
+.. list-table::
+   :header-rows: 1
+
+   * - Milestone
+     - Week of
+     - What
+   * - R-20
+     - Nov 17
+     - Caracal-1 Milestone
+   * - R-12
+     - Jan 12
+     - * Caracal-2 Milestone
+       * **Glance Spec freeze**
+   * - R-6
+     - Feb 23
+     - glance_store Caracal release (final release for non-client libraries)
+   * - R-5
+     - Mar 01
+     - * Caracal-3 milestone
+       * **Glance feature freeze**
+       * python-glanceclient caracal release (final release for client libraries);
+   * - R-3
+     - Mar 15
+     - RC-1 release and **string freeze**
+   * - R-1
+     - Mar 29
+     - final RCs
+   * - R-0
+     - Apr 05
+     - **Caracal release**
