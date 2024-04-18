@@ -4,8 +4,97 @@
 2024.2 Project Priorities
 =========================
 
-TODO(glance-ptl): fill this in after the PTG
+The Dalmatian Cycle priorities were discussed during Dalmatian Virtual
+PTG. The preliminary list was maintained on the `Dalmatian PTG etherpad`_.
+
+The following indicates milestonewise priorities.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Priority Item
+     - Owner(s)
+     - Spec(s)
+     - Target release milestone
+   * - Deprecate metadata_encryption_key
+     - `Pranali Deore`_
+     - `deprecate metadata encryption key`_
+     - M1
+   * - New Location APIs
+     - `Pranali Deore`_
+     - `new location apis`_
+     - M2
+   * - New sub-store NFS for FS store
+     - `Abhishek Kekane`_
+     - `improve_filesystem_driver`_
+     - M2
+   * - Add CLI utility for migrating images
+     - `Abhishek Kekane`_
+     - None
+     - M3
+   * - Removed all unused config options
+     - `Cyril Roelandt`_
+     - None
+     - M3
+   * - All image/metadef APIs OSC & SDK Support
+     - `Mridula Joshi`_
+     - None
+     - M3
+   * - Image Encryption
+     - `Josephine Seifert`_
+     - `image encryption`_
+     - M3
 
 
+.. _Dalmatian PTG etherpad: https://etherpad.opendev.org/p/apr2024-ptg-glance#L431
+
+.. _Josephine Seifert: https://launchpad.net/~josei
+.. _Mridula Joshi: https://launchpad.net/~mrjoshi
+.. _Cyril Roelandt: https://launchpad.net/~cyril-roelandt
+.. _Abhishek Kekane: https://launchpad.net/~abhishek-kekane
+.. _Pranali Deore: https://launchpad.net/~pranali-deore
+
+.. _new location apis: https://review.opendev.org/c/openstack/glance-specs/+/883491
+.. _deprecate metadata encryption key: https://review.opendev.org/c/openstack/glance-specs/+/916178
+.. _image encryption: https://review.opendev.org/c/openstack/glance-specs/+/915726
+.. _improve_filesystem_driver: https://review.opendev.org/c/openstack/glance-specs/+/917284
 
 
+Important dates
+---------------
+
+This is an abbreviated list focused on dates relevant to Glance.  See
+`Dalmatian Release Schedule`_ for the complete list for OpenStack.
+
+.. _Dalmatian Release Schedule: https://releases.openstack.org/dalmatian/schedule.html
+
+.. list-table::
+   :header-rows: 1
+
+   * - Milestone
+     - Week of
+     - What
+   * - R-20
+     - May 17
+     - Dalmatian-1 Milestone
+   * - R-13
+     - Jul 05
+     - * Dalmatian-2 Milestone
+       * **Glance Spec freeze**
+   * - R-6
+     - Aug 23
+     - glance_store Dalmatian release (final release for non-client libraries)
+   * - R-5
+     - Aug 30
+     - * Dalmatian-3 milestone
+       * **Glance feature freeze**
+       * python-glanceclient dalmatian release (final release for client libraries);
+   * - R-3
+     - Sept 13
+     - RC-1 release and **string freeze**
+   * - R-1
+     - Sept 27
+     - final RCs
+   * - R-0
+     - Oct 04
+     - **Dalmatian release**
