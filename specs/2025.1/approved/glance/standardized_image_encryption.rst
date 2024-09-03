@@ -82,20 +82,27 @@ Use Cases
 Proposed change
 ===============
 
+There are two ways encryption in images can be handled. The first is having a
+qcow2 formatted disk with an internal encryption. The 'disk_format' for such an
+image will consequently be 'qcow2' and the encryption can be detected through
+the presence of the proposed additional metadata.
+For other images the 'disk_format' will be used to indicate the encryption. It
+should state the main encryption mechanism used, which for now is 'luks'. We
+additionally assume that the format of a decrypted LUKS-image will always be
+'raw'. The format can only be checked after a decryption of at least the first
+few bytes this is currently out of scope for Glance. Every service, that uses
+such encrypted LUKS-images needs to be aware of it.
+
 Furthermore, we propose the following additional metadata properties carried by
 images of this format:
 
-* 'os_encrypt_format' - the main mechanism used, e.g. 'LUKS'
-* 'os_encrypt_cipher' - the cipher algorithm, e.g. 'AES256'
+* 'os_encrypt_format' - the specific mechanism used, e.g. 'LUKSv1'
 * 'os_encrypt_key_id' - reference to key in the key manager
 * 'os_encrypt_key_deletion_policy' - on image deletion indicates whether the
   key should be deleted too
 * 'os_decrypt_container_format' - format change, e.g. from 'compressed' to
   'bare'
 * 'os_decrypt_size' - size after payload decryption
-
-The 'disk_format' of images, that will be used by Nova and Cinder are either
-'qcow2' or 'raw'.
 
 To upload an encrypted image to Glance we want to extend the OpenStack Client
 to allow the specification of the necessary metadata properties as the key ID
@@ -216,9 +223,9 @@ Example request:
 ```
 REQ: curl -g -i -X POST
 http://a.b.c.d/image/v2/images -H "Content-Type: application/json" .... -d '
-{"disk_format": "raw", "name": "cirros", "container_format": "compressed",
-"os_encrypt_format": "LUKS", "os_encrypt_key_id": "...",
-"os_encrypt_key_deletion_policy": "True", "os_encrypt_cipher": "...",
+{"disk_format": "LUKS", "name": "cirros", "container_format": "compressed",
+"os_encrypt_format": "LUKSv1", "os_encrypt_key_id": "...",
+"os_encrypt_key_deletion_policy": "True", "os_decrypt_format": "raw",
 "os_decrypt_container_format": "bare", "os_decrypt_size": "...", ...}'
 ```
 
