@@ -505,7 +505,7 @@ users in a cloud without the requirement of creating members on the image.
 
 A community image is an image whose ``visibility`` value is ``community``.  The
 ability to communitize an image may be prohibited or restricted to specific
-users at the discreation of the cloud operator.  To make an image a community
+users at the discretion of the cloud operator.  To make an image a community
 image, use the image update call to change the image's visibility
 appropriately.  (See :ref:`image-update` for more information.)
 
