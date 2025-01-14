@@ -73,13 +73,12 @@ We should note several things:
 
   [glance_download_properties]
   extra_properties_prefixes = [
-    'hw_',
-    'trait:',
-    'os_distro',
-    'os_secure_boot',
-    'os_type'
-  ]
-..
+      hw_,
+      trait:,
+      os_distro,
+      os_secure_boot,
+      os_type
+    ]
 
 * If metadata injection is configured on the target glance it will override
   the metadata as the injection is run after the import.
