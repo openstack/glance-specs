@@ -1,0 +1,11 @@
+.. _2025.2-priorities:
+
+=========================
+2025.2 Project Priorities
+=========================
+
+TODO(glance-ptl): fill this in after the PTG
+
+
+
+
