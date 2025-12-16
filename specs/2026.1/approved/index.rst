@@ -7,6 +7,7 @@
    :maxdepth: 1
 
    glance/*
+   glance_store/*
 
 
 
