@@ -7,6 +7,7 @@
    :maxdepth: 1
 
    glance/*
+   glance_store/*
 
 2026.1 approved specs for glance_store:
 
