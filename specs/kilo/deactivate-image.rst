@@ -89,7 +89,7 @@ http://eavesdrop.openstack.org/meetings/api_wg/2015/api_wg.2015-02-19-00.00.log.
   * Normal response code(s): 204
   * Expected error http response code(s): 403
 
-    * When calling deactivate on an image which is not currently in the 
+    * When calling deactivate on an image which is not currently in the
       'active' or 'deactivated' state.
 
   * URL for the resource: /v2/images/{image_id}/actions/deactivate
@@ -114,7 +114,7 @@ http://eavesdrop.openstack.org/meetings/api_wg/2015/api_wg.2015-02-19-00.00.log.
   * Method: GET
   * Normal response code(s): 200, 204
   * Expected error http response code(s): 403
- 
+
    * When attempting to download a deactivated image
 
   * URL for the resource: /v2/images/{image_id}/file

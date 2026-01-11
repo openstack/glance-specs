@@ -53,18 +53,18 @@ Add new configuration option ``weight`` default to zero for each store.
 Operator can change it for each store if they wish. The store with highest
 weight will be given preference to download the image from.
 
-.. code-block:: none
+.. code-block:: ini
 
-[default]
-enabled_backends = robust:rbd,cheap:file
+  [default]
+  enabled_backends = robust:rbd,cheap:file
 
-[robust]
-rbd_store_pool=images
-weight=10
+  [robust]
+  rbd_store_pool=images
+  weight=10
 
-[cheap]
-filesystem_store_datadir=/opt/stack/data/glance/images/
-weight=5
+  [cheap]
+  filesystem_store_datadir=/opt/stack/data/glance/images/
+  weight=5
 
 In above example, `robust` store will always be a preferred store to download
 the image from. If image is not available in `robust` store then it will be

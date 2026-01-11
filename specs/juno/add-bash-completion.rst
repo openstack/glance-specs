@@ -23,17 +23,17 @@ Proposed change
 ===============
 
 Incorporation of bash completion feature.
-This feature uses the linux script called bash_completion.d to 
-request all the commands and parameters to Glance through 
-bash_completion command. After obtaining them, they are filtered 
-and shown. 
+This feature uses the linux script called bash_completion.d to
+request all the commands and parameters to Glance through
+bash_completion command. After obtaining them, they are filtered
+and shown.
 
 Example of use:
 
-glance <tab><tab> ---> shows all the commands
+glance <tab><tab> --->shows all the commands
 
-glance image- <tab><tab> ---> shows all the commands starting with the
-word ‘image’: image-list, image-show, image-create… 
+glance image- <tab><tab> --->shows all the commands starting with the
+word ‘image’: image-list, image-show, image-create…
 
 If there is only one, it will be completed.
 

@@ -1,1 +1,2 @@
+doc8  # Apache-2.0
 flake8  # MIT
