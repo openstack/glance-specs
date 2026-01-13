@@ -20,6 +20,7 @@ import testtools
 
 class FakeDirective(rst.Directive):
     has_content = True
+
     def run(self):
         return []
 
@@ -73,11 +74,11 @@ class TestTitles(testtools.TestCase):
         impl = 'Implementation'
         self.assertIn(impl, titles)
         # NOTE(nikhil_k): Reviewers subsection is expected in specs
-        #which are not in the juno directory. One exception is the
-        #spec specs/juno/example.rst which is auto loaded from the
-        #template.rst file.
+        # which are not in the juno directory. One exception is the
+        # spec specs/juno/example.rst which is auto loaded from the
+        # template.rst file.
         if (self.filename.startswith('specs/juno') and
-            self.filename != 'specs/juno/example.rst'):
+                self.filename != 'specs/juno/example.rst'):
             self.assertEqual(2, len(titles[impl]), self.filename)
         else:
             self.assertEqual(2, len(titles[impl]), self.filename)
