@@ -1361,7 +1361,7 @@ IOPS, burst IOPS, etc.
 
 /metadefs/namespace/MyHostGroups/detail
 
-Diagram::                   
+Diagram::
 
  +------------------------+
  |  MyHostGroups          |    +-----------------+

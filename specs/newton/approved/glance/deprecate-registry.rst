@@ -145,7 +145,7 @@ Dependencies
 Testing
 =======
 
-Test a registry-less deployment in the OpenStack CI. 
+Test a registry-less deployment in the OpenStack CI.
 
 Documentation Impact
 ====================

@@ -197,7 +197,7 @@ Work Items
 Dependencies
 ============
 
-The `gpt` part of this depends on the `oslo port of the inspector 
+The `gpt` part of this depends on the `oslo port of the inspector
 <https://review.opendev.org/q/topic:%22add-format-inspector%22>`_ code.
 
 Testing

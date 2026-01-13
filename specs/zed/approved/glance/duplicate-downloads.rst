@@ -103,7 +103,7 @@ chunks.
 
 For the first request:
 
-.. code-block:: none
+.. code-block:: text
 
     if the cache entry does not exist:
         mark the image "caching"
@@ -114,7 +114,7 @@ For the first request:
 
 For the subsequent request:
 
-.. code-block:: none
+.. code-block:: text
 
     if the image is marked "caching" or "cached":
         read the chunk from the cache until we get all the expected chunks

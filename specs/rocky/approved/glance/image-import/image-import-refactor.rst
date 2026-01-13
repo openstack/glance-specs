@@ -579,7 +579,7 @@ Two new image status values will be added to the Image object:
    in ``saving`` status.  Thus it's not possible to use both upload methods on
    the same image.)
 
-``importing`` 
+``importing``
    Why needed: This status conveys to the user that an import call has been
    made but that the image is not yet ready for use.  Data-put calls are not
    accepted when an image is in this state.
