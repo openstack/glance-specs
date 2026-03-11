@@ -3,7 +3,9 @@
       - openstack-specs-jobs
     check:
       jobs:
+        - openstack-tox-pep8
         - openstack-tox-py313
     gate:
       jobs:
+        - openstack-tox-pep8
         - openstack-tox-py313
