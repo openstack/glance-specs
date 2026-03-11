@@ -146,7 +146,7 @@ An /api directory is now included for REST API updates. Each API method which is
   think about when defining their policy.
 
 Example JSON schema definitions can be found in the Glance tree
-http://git.openstack.org/cgit/openstack/glance/tree/glance/api/v2/tasks.py#n300
+https://opendev.org/openstack/glance/src/branch/master/glance/api/v2/tasks.py#L342
 
 Note that the schema should be defined as restrictively as
 possible. Parameters which are required should be marked as such and

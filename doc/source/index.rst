@@ -7,9 +7,9 @@ Image Service (Glance) Plans
 The Glance Project Team has the responsibility for maintaining the
 following projects:
 
-* Glance: https://git.openstack.org/cgit/openstack/glance
-* The glance_store library: https://git.openstack.org/cgit/openstack/glance_store
-* The Glance client: https://git.openstack.org/cgit/openstack/python-glanceclient
+* Glance: https://opendev.org/openstack/glance
+* The glance_store library: https://opendev.org/openstack/glance_store
+* The Glance client: https://opendev.org/openstack/python-glanceclient
 
 This repository contains proposals for new features, or proposals for
 changes to the current projects that are sufficiently complicated or
